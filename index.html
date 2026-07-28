@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Feriados 2026</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CALENDARIO DE FERIADOS 2026</h1>
+            <div class="nav-periodo">
+                <button id="prev-btn">&#9664;</button>
+                <span id="periodo-label">SEGUNDO SEMESTRE 2026</span>
+                <button id="next-btn">&#9654;</button>
+            </div>
+            <div id="leyenda" class="leyenda"></div>
+            <div id="filtros" class="filtros"></div>
+        </header>
+        <main class="calendario">
+            <div id="mes-header" class="mes-header"></div>
+            <div class="dias-semana">
+                <span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span>
+            </div>
+            <div id="dias-grid" class="dias-grid"></div>
+        </main>
+    </div>
+    <script src="js/holidays.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
