@@ -15,15 +15,22 @@
                 <span id="periodo-label">SEGUNDO SEMESTRE 2026</span>
                 <button id="next-btn">&#9654;</button>
             </div>
+            <div class="vista-toggle">
+                <button id="vista-mes" class="vista-btn active">MES</button>
+                <button id="vista-semestre" class="vista-btn">SEMESTRE</button>
+            </div>
             <div id="leyenda" class="leyenda"></div>
             <div id="filtros" class="filtros"></div>
         </header>
         <main class="calendario">
-            <div id="mes-header" class="mes-header"></div>
-            <div class="dias-semana">
-                <span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span>
+            <div id="vista-mes-container">
+                <div id="mes-header" class="mes-header"></div>
+                <div class="dias-semana">
+                    <span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span>
+                </div>
+                <div id="dias-grid" class="dias-grid"></div>
             </div>
-            <div id="dias-grid" class="dias-grid"></div>
+            <div id="vista-semestre-container" class="semestre-grid" style="display:none"></div>
         </main>
     </div>
     <script src="js/holidays.js"></script>

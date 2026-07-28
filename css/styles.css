@@ -51,6 +51,86 @@ header h1 {
     background: #e8eaed;
 }
 
+.vista-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin: 8px 0;
+}
+
+.vista-btn {
+    background: #fff;
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    padding: 4px 16px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.vista-btn.active {
+    background: #1a1a2e;
+    color: #fff;
+    border-color: #1a1a2e;
+}
+
+.vista-btn:hover:not(.active) {
+    background: #e8eaed;
+}
+
+.semestre-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.mes-block {
+    background: #fff;
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.mes-block .mes-header {
+    font-size: 0.85rem;
+    padding: 4px 0;
+}
+
+.mes-block .dias-semana {
+    font-size: 0.6rem;
+    padding: 2px 0;
+}
+
+.mes-block .dias-grid {
+    gap: 1px;
+}
+
+.mes-block .dia {
+    min-height: 36px;
+    padding: 2px;
+    border-radius: 4px;
+}
+
+.mes-block .dia-numero {
+    font-size: 0.65rem;
+}
+
+.mes-block .indicador {
+    width: 5px;
+    height: 5px;
+}
+
+.mes-block .tooltip {
+    font-size: 0.7rem;
+    min-width: 160px;
+    padding: 10px 12px;
+}
+
+.mes-block .tooltip-fecha {
+    font-size: 0.72rem;
+}
+
 .leyenda {
     display: flex;
     flex-wrap: wrap;
@@ -263,6 +343,12 @@ header h1 {
     padding: 8px 0;
 }
 
+@media (max-width: 900px) {
+    .semestre-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 600px) {
     .container {
         padding: 8px;
@@ -289,5 +375,12 @@ header h1 {
         left: 0;
         right: 0;
         transform: none;
+    }
+    .semestre-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    .mes-block .dia {
+        min-height: 30px;
     }
 }
