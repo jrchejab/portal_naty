@@ -260,8 +260,8 @@ function getPrintHtml(monthIdx) {
     const m2Name = MONTHS[monthIdx + 1];
 
     const legendHtml = countries.map(c =>
-        `<span style="display:inline-flex;align-items:center;gap:4px;margin:0 6px;font-size:11px;">
-            <span style="width:10px;height:10px;border-radius:50%;background:${c.color};display:inline-block;"></span>
+        `<span style="display:inline-flex;align-items:center;gap:4px;margin:0 5px;font-size:10px;">
+            <span style="width:9px;height:9px;border-radius:50%;background:${c.color};display:inline-block;print-color-adjust:exact;-webkit-print-color-adjust:exact;"></span>
             ${c.name}
         </span>`
     ).join("");
@@ -287,10 +287,10 @@ function getPrintHtml(monthIdx) {
         for (let r = 0; r < cells.length / 7; r++) {
             const week = cells.slice(r * 7, (r + 1) * 7);
             rows.push(`<tr>${week.map(d => {
-                if (d === null) return '<td class="vacio"></td>';
+                if (d === null) return '<td class="v"></td>';
                 const dateStr = formatDate(year, month, d);
                 const hList = holidays.filter(h => h.date === dateStr);
-                let borderStyle = "border:1px solid #e0e0e0;";
+                let borderStyle = "border:1px solid #d0d5dd;";
                 let dots = "";
                 if (hList.length > 0) {
                     const seen = [];
@@ -299,18 +299,15 @@ function getPrintHtml(monthIdx) {
                         seen.push(h);
                     });
                     const colors = seen.map(h => getCountry(h.country).color);
-                    borderStyle = `border:2px solid ${colors[0]};`;
-                    if (colors.length > 1) {
-                        const shadows = colors.slice(1).map((c, i) =>
-                            `inset 0 -${4 + i * 4}px 0 0 ${c}`
-                        ).join(",");
-                        borderStyle += `box-shadow:${shadows};`;
-                    }
-                    dots = `<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;margin-top:2px;">${colors.map(c =>
-                        `<span style="width:7px;height:7px;border-radius:50%;background:${c};display:inline-block;"></span>`
+                    const shadows = colors.map((c, i) =>
+                        `inset 0 -${3 + i * 4}px 0 0 ${c}`
+                    ).join(",");
+                    borderStyle = `border:2px solid ${colors[0]};box-shadow:${shadows};print-color-adjust:exact;-webkit-print-color-adjust:exact;`;
+                    dots = `<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;margin-top:4px;">${colors.map(c =>
+                        `<span style="width:7px;height:7px;border-radius:50%;background:${c};display:inline-block;print-color-adjust:exact;-webkit-print-color-adjust:exact;"></span>`
                     ).join("")}</div>`;
                 }
-                return `<td style="text-align:center;padding:4px 2px;font-size:13px;font-weight:${hList.length ? 700 : 400};${borderStyle}border-radius:4px;background:#fff;">${d}${dots}</td>`;
+                return `<td style="text-align:center;vertical-align:top;padding:6px 2px;font-size:13px;font-weight:${hList.length ? 700 : 400};${borderStyle}border-radius:4px;background:#fff;print-color-adjust:exact;-webkit-print-color-adjust:exact;">${d}${dots}</td>`;
             }).join("")}</tr>`);
         }
         return rows.join("");
@@ -322,16 +319,17 @@ function getPrintHtml(monthIdx) {
     return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Calendario Feriados 2026 - ${m1Name} / ${m2Name}</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:30px 40px;color:#1a1a2e;}
-h1{text-align:center;font-size:20px;margin-bottom:8px;}
-.leyenda{text-align:center;margin-bottom:18px;}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
-.mes h2{text-align:center;font-size:16px;margin-bottom:8px;}
-.dow{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:11px;font-weight:600;color:#6b7280;margin-bottom:4px;}
-table{width:100%;border-collapse:collapse;}
-td{text-align:center;padding:5px 2px;font-size:13px;border:1px solid #e0e0e0;border-radius:4px;background:#fff;}
-td.vacio{border:none;background:transparent;}
-@media print{body{padding:20px;}.grid{gap:30px;}@page{size:landscape;margin:15mm;}}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:24px 32px;color:#1a1a2e;height:100vh;}
+h1{text-align:center;font-size:18px;margin-bottom:6px;}
+.leyenda{text-align:center;margin-bottom:12px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;height:calc(100vh - 110px);}
+.mes{display:flex;flex-direction:column;height:100%;}
+.mes h2{text-align:center;font-size:15px;margin-bottom:6px;flex-shrink:0;}
+.dow{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:10px;font-weight:600;color:#6b7280;margin-bottom:4px;flex-shrink:0;}
+table{width:100%;border-collapse:collapse;flex:1;}
+td{text-align:center;vertical-align:top;padding:8px 3px;font-size:13px;border:1px solid #d0d5dd;border-radius:4px;background:#fff;width:14.28%;height:calc((100vh - 200px) / 6);print-color-adjust:exact;-webkit-print-color-adjust:exact;}
+td.v{border:none;background:transparent;}
+@media print{body{padding:16px 24px;}.grid{height:calc(100vh - 100px);gap:24px;}td{height:calc((100vh - 180px) / 6);}@page{size:landscape;margin:12mm;}}
 </style></head>
 <body>
 <h1>CALENDARIO DE FERIADOS 2026</h1>
