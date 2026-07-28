@@ -51,6 +51,19 @@ header h1 {
     background: #e8eaed;
 }
 
+.print-btn {
+    font-size: 0.8rem !important;
+    padding: 6px 12px !important;
+    background: #1a1a2e !important;
+    color: #fff !important;
+    border-color: #1a1a2e !important;
+    margin-left: 8px;
+}
+
+.print-btn:hover {
+    background: #2d2d4e !important;
+}
+
 .vista-toggle {
     display: flex;
     justify-content: center;

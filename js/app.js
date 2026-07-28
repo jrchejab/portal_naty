@@ -208,10 +208,12 @@ function updateNavButtons() {
     const show = currentView === "MES";
     document.getElementById("prev-btn").style.display = show ? "" : "none";
     document.getElementById("next-btn").style.display = show ? "" : "none";
+    document.getElementById("print-btn").style.display = show ? "" : "none";
     document.getElementById("periodo-label").textContent = show ? "SEGUNDO SEMESTRE 2026" : "";
     if (show) {
         document.getElementById("prev-btn").disabled = currentMonthIndex === 0;
         document.getElementById("next-btn").disabled = currentMonthIndex === MONTHS.length - 1;
+        document.getElementById("print-btn").style.display = currentMonthIndex < MONTHS.length - 1 ? "" : "none";
     }
 }
 
@@ -251,6 +253,109 @@ function setupFilters() {
     });
 }
 
+function getPrintHtml(monthIdx) {
+    const m1 = MONTH_OFFSET + monthIdx;
+    const m2 = m1 + 1;
+    const m1Name = MONTHS[monthIdx];
+    const m2Name = MONTHS[monthIdx + 1];
+
+    const legendHtml = countries.map(c =>
+        `<span style="display:inline-flex;align-items:center;gap:4px;margin:0 6px;font-size:11px;">
+            <span style="width:10px;height:10px;border-radius:50%;background:${c.color};display:inline-block;"></span>
+            ${c.name}
+        </span>`
+    ).join("");
+
+    function build(year, month) {
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const startDow = firstDay.getDay();
+        const startOffset = startDow === 0 ? 6 : startDow - 1;
+        const daysInMonth = lastDay.getDate();
+        const totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
+        const cells = [];
+        for (let i = 0; i < totalCells; i++) {
+            const d = i - startOffset + 1;
+            cells.push(d < 1 || d > daysInMonth ? null : d);
+        }
+        return cells;
+    }
+
+    function renderTable(year, month) {
+        const cells = build(year, month);
+        const rows = [];
+        for (let r = 0; r < cells.length / 7; r++) {
+            const week = cells.slice(r * 7, (r + 1) * 7);
+            rows.push(`<tr>${week.map(d => {
+                if (d === null) return '<td class="vacio"></td>';
+                const dateStr = formatDate(year, month, d);
+                const hList = holidays.filter(h => h.date === dateStr);
+                let borderStyle = "border:1px solid #e0e0e0;";
+                let dots = "";
+                if (hList.length > 0) {
+                    const seen = [];
+                    hList.forEach(h => {
+                        if (seen.find(s => s.country === h.country)) return;
+                        seen.push(h);
+                    });
+                    const colors = seen.map(h => getCountry(h.country).color);
+                    borderStyle = `border:2px solid ${colors[0]};`;
+                    if (colors.length > 1) {
+                        const shadows = colors.slice(1).map((c, i) =>
+                            `inset 0 -${4 + i * 4}px 0 0 ${c}`
+                        ).join(",");
+                        borderStyle += `box-shadow:${shadows};`;
+                    }
+                    dots = `<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;margin-top:2px;">${colors.map(c =>
+                        `<span style="width:7px;height:7px;border-radius:50%;background:${c};display:inline-block;"></span>`
+                    ).join("")}</div>`;
+                }
+                return `<td style="text-align:center;padding:4px 2px;font-size:13px;font-weight:${hList.length ? 700 : 400};${borderStyle}border-radius:4px;background:#fff;">${d}${dots}</td>`;
+            }).join("")}</tr>`);
+        }
+        return rows.join("");
+    }
+
+    const months = [m1, m2];
+    const names = [m1Name, m2Name];
+
+    return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Calendario Feriados 2026 - ${m1Name} / ${m2Name}</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:30px 40px;color:#1a1a2e;}
+h1{text-align:center;font-size:20px;margin-bottom:8px;}
+.leyenda{text-align:center;margin-bottom:18px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+.mes h2{text-align:center;font-size:16px;margin-bottom:8px;}
+.dow{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:11px;font-weight:600;color:#6b7280;margin-bottom:4px;}
+table{width:100%;border-collapse:collapse;}
+td{text-align:center;padding:5px 2px;font-size:13px;border:1px solid #e0e0e0;border-radius:4px;background:#fff;}
+td.vacio{border:none;background:transparent;}
+@media print{body{padding:20px;}.grid{gap:30px;}@page{size:landscape;margin:15mm;}}
+</style></head>
+<body>
+<h1>CALENDARIO DE FERIADOS 2026</h1>
+<div class="leyenda">${legendHtml}</div>
+<div class="grid">
+${months.map((m, i) => `
+<div class="mes">
+<h2>${names[i].toUpperCase()} ${YEAR}</h2>
+<div class="dow"><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span></div>
+<table>${renderTable(YEAR, m)}</table>
+</div>`).join("")}
+</div>
+<script>window.onload=function(){window.print();};<\/script>
+</body></html>`;
+}
+
+function openPrintView() {
+    if (currentMonthIndex >= MONTHS.length - 1) return;
+    const html = getPrintHtml(currentMonthIndex);
+    const w = window.open("", "_blank", "width=1000,height=700");
+    w.document.write(html);
+    w.document.close();
+}
+
 function setupNavigation() {
     document.getElementById("prev-btn").addEventListener("click", () => {
         if (currentMonthIndex > 0) {
@@ -258,6 +363,7 @@ function setupNavigation() {
             renderCurrent();
         }
     });
+    document.getElementById("print-btn").addEventListener("click", openPrintView);
     document.getElementById("next-btn").addEventListener("click", () => {
         if (currentMonthIndex < MONTHS.length - 1) {
             currentMonthIndex++;
