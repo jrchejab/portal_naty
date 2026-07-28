@@ -92,6 +92,25 @@ header h1 {
     background: #e8eaed;
 }
 
+.bimestre-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.bimestre-grid .mes-block .dia {
+    min-height: 52px;
+}
+
+.bimestre-grid .mes-block .dia-numero {
+    font-size: 0.75rem;
+}
+
+.bimestre-grid .mes-block .indicador {
+    width: 7px;
+    height: 7px;
+}
+
 .semestre-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -359,6 +378,9 @@ header h1 {
 @media (max-width: 900px) {
     .semestre-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+    .bimestre-grid {
+        grid-template-columns: 1fr;
     }
 }
 

@@ -4,7 +4,7 @@ const MONTHS = [
 const MONTH_OFFSET = 6;
 const YEAR = 2026;
 
-let currentMonthIndex = 0;
+let currentStart = 0;
 let activeFilter = "ALL";
 let currentView = "MES";
 
@@ -26,11 +26,7 @@ function buildMonth(year, month) {
     const cells = [];
     for (let i = 0; i < totalCells; i++) {
         const dayNum = i - startOffset + 1;
-        if (dayNum < 1 || dayNum > daysInMonth) {
-            cells.push(null);
-        } else {
-            cells.push(dayNum);
-        }
+        cells.push(dayNum < 1 || dayNum > daysInMonth ? null : dayNum);
     }
     return cells;
 }
@@ -62,12 +58,10 @@ function getMonthHolidays(year, month) {
 }
 
 function closeAllTooltips() {
-    document.querySelectorAll(".tooltip.show").forEach(t => {
-        t.classList.remove("show");
-    });
+    document.querySelectorAll(".tooltip.show").forEach(t => t.classList.remove("show"));
 }
 
-function renderMonthEl(container, year, month, compact) {
+function renderMonthEl(container, year, month) {
     container.innerHTML = "";
     closeAllTooltips();
 
@@ -122,7 +116,6 @@ function renderMonthEl(container, year, month, compact) {
 
             const tip = document.createElement("div");
             tip.className = "tooltip";
-
             const fechaLabel = `${dayNum} DE ${MONTHS[month - MONTH_OFFSET].toUpperCase()} DE ${year}`;
             tip.innerHTML = `<div class="tooltip-fecha">${fechaLabel}</div>`;
 
@@ -171,8 +164,28 @@ function renderMonth(year, month) {
         </div>
         <div id="dias-grid" class="dias-grid"></div>
     `;
+    document.getElementById("vista-bimestre-container").style.display = "none";
     document.getElementById("vista-semestre-container").style.display = "none";
-    renderMonthEl(document.getElementById("vista-mes-container"), year, month, false);
+    renderMonthEl(document.getElementById("vista-mes-container"), year, month);
+    updateLegend();
+    updateNavButtons();
+}
+
+function renderBimestre(start) {
+    const container = document.getElementById("vista-bimestre-container");
+    container.style.display = "grid";
+    container.innerHTML = "";
+    document.getElementById("vista-mes-container").style.display = "none";
+    document.getElementById("vista-semestre-container").style.display = "none";
+    closeAllTooltips();
+
+    for (let i = 0; i < 2; i++) {
+        const block = document.createElement("div");
+        block.className = "mes-block";
+        container.appendChild(block);
+        renderMonthEl(block, YEAR, start + i + MONTH_OFFSET);
+    }
+
     updateLegend();
     updateNavButtons();
 }
@@ -182,13 +195,14 @@ function renderSemestre() {
     container.style.display = "grid";
     container.innerHTML = "";
     document.getElementById("vista-mes-container").style.display = "none";
+    document.getElementById("vista-bimestre-container").style.display = "none";
     closeAllTooltips();
 
     for (let i = 0; i < MONTHS.length; i++) {
         const block = document.createElement("div");
         block.className = "mes-block";
         container.appendChild(block);
-        renderMonthEl(block, YEAR, i + MONTH_OFFSET, true);
+        renderMonthEl(block, YEAR, i + MONTH_OFFSET);
     }
 
     updateLegend();
@@ -204,22 +218,42 @@ function updateLegend() {
     ).join("");
 }
 
+function getStep() {
+    return currentView === "BIMESTRE" ? 2 : 1;
+}
+
+function getMax() {
+    return currentView === "BIMESTRE" ? MONTHS.length - 2 : MONTHS.length - 1;
+}
+
 function updateNavButtons() {
-    const show = currentView === "MES";
+    const show = currentView !== "SEMESTRE";
     document.getElementById("prev-btn").style.display = show ? "" : "none";
     document.getElementById("next-btn").style.display = show ? "" : "none";
-    document.getElementById("print-btn").style.display = show ? "" : "none";
-    document.getElementById("periodo-label").textContent = show ? "SEGUNDO SEMESTRE 2026" : "";
+
+    if (currentView === "MES") {
+        document.getElementById("periodo-label").textContent = "SEGUNDO SEMESTRE 2026";
+        document.getElementById("print-btn").style.display = currentStart < MONTHS.length - 1 ? "" : "none";
+    } else if (currentView === "BIMESTRE") {
+        document.getElementById("periodo-label").textContent =
+            `${MONTHS[currentStart]} - ${MONTHS[currentStart + 1]} ${YEAR}`;
+        document.getElementById("print-btn").style.display = "none";
+    } else {
+        document.getElementById("periodo-label").textContent = "";
+        document.getElementById("print-btn").style.display = "none";
+    }
+
     if (show) {
-        document.getElementById("prev-btn").disabled = currentMonthIndex === 0;
-        document.getElementById("next-btn").disabled = currentMonthIndex === MONTHS.length - 1;
-        document.getElementById("print-btn").style.display = currentMonthIndex < MONTHS.length - 1 ? "" : "none";
+        document.getElementById("prev-btn").disabled = currentStart === 0;
+        document.getElementById("next-btn").disabled = currentStart >= getMax();
     }
 }
 
 function renderCurrent() {
     if (currentView === "MES") {
-        renderMonth(YEAR, currentMonthIndex + MONTH_OFFSET);
+        renderMonth(YEAR, currentStart + MONTH_OFFSET);
+    } else if (currentView === "BIMESTRE") {
+        renderBimestre(currentStart);
     } else {
         renderSemestre();
     }
@@ -313,9 +347,6 @@ function getPrintHtml(monthIdx) {
         return rows.join("");
     }
 
-    const months = [m1, m2];
-    const names = [m1Name, m2Name];
-
     return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Calendario Feriados 2026 - ${m1Name} / ${m2Name}</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -335,20 +366,16 @@ td.v{border:none;background:transparent;}
 <h1>CALENDARIO DE FERIADOS 2026</h1>
 <div class="leyenda">${legendHtml}</div>
 <div class="grid">
-${months.map((m, i) => `
-<div class="mes">
-<h2>${names[i].toUpperCase()} ${YEAR}</h2>
-<div class="dow"><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span></div>
-<table>${renderTable(YEAR, m)}</table>
-</div>`).join("")}
+<div class="mes"><h2>${m1Name.toUpperCase()} ${YEAR}</h2><div class="dow"><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span></div><table>${renderTable(YEAR, m1)}</table></div>
+<div class="mes"><h2>${m2Name.toUpperCase()} ${YEAR}</h2><div class="dow"><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span></div><table>${renderTable(YEAR, m2)}</table></div>
 </div>
 <script>window.onload=function(){window.print();};<\/script>
 </body></html>`;
 }
 
 function openPrintView() {
-    if (currentMonthIndex >= MONTHS.length - 1) return;
-    const html = getPrintHtml(currentMonthIndex);
+    if (currentStart >= MONTHS.length - 1) return;
+    const html = getPrintHtml(currentStart);
     const w = window.open("", "_blank", "width=1000,height=700");
     w.document.write(html);
     w.document.close();
@@ -356,15 +383,15 @@ function openPrintView() {
 
 function setupNavigation() {
     document.getElementById("prev-btn").addEventListener("click", () => {
-        if (currentMonthIndex > 0) {
-            currentMonthIndex--;
+        if (currentStart > 0) {
+            currentStart -= getStep();
             renderCurrent();
         }
     });
     document.getElementById("print-btn").addEventListener("click", openPrintView);
     document.getElementById("next-btn").addEventListener("click", () => {
-        if (currentMonthIndex < MONTHS.length - 1) {
-            currentMonthIndex++;
+        if (currentStart < getMax()) {
+            currentStart += getStep();
             renderCurrent();
         }
     });
@@ -377,19 +404,26 @@ document.addEventListener("click", (e) => {
 });
 
 function setupViewToggle() {
-    document.getElementById("vista-mes").addEventListener("click", () => {
-        if (currentView === "MES") return;
-        currentView = "MES";
-        document.getElementById("vista-mes").classList.add("active");
-        document.getElementById("vista-semestre").classList.remove("active");
-        renderCurrent();
-    });
-    document.getElementById("vista-semestre").addEventListener("click", () => {
-        if (currentView === "SEMESTRE") return;
-        currentView = "SEMESTRE";
-        document.getElementById("vista-semestre").classList.add("active");
-        document.getElementById("vista-mes").classList.remove("active");
-        renderCurrent();
+    const views = ["MES", "BIMESTRE", "SEMESTRE"];
+    const ids = ["vista-mes", "vista-bimestre", "vista-semestre"];
+
+    views.forEach((v, i) => {
+        document.getElementById(ids[i]).addEventListener("click", () => {
+            if (currentView === v) return;
+            const prevView = currentView;
+            currentView = v;
+            ids.forEach(id => document.getElementById(id).classList.remove("active"));
+            document.getElementById(ids[i]).classList.add("active");
+
+            if (prevView === "SEMESTRE" && v !== "SEMESTRE") {
+                currentStart = 0;
+            } else if (prevView === "MES" && v === "BIMESTRE") {
+                currentStart = Math.floor(currentStart / 2) * 2;
+            } else if (prevView === "BIMESTRE" && v === "MES") {
+            }
+
+            renderCurrent();
+        });
     });
 }
 
