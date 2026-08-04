@@ -64,6 +64,135 @@ header h1 {
     background: #2d2d4e !important;
 }
 
+.nav-link {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    background: #1a1a2e;
+    color: #fff;
+    border: 1px solid #1a1a2e;
+    border-radius: 8px;
+    margin-left: 8px;
+    transition: background 0.15s;
+}
+
+.nav-link:hover {
+    background: #2d2d4e;
+}
+
+.hora-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.hora-container h1 {
+    text-align: center;
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+}
+
+.hora-sub {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+}
+
+.hora-volver {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.hora-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.hora-tabla {
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+}
+
+.hora-tabla h2 {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.hora-tabla table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.hora-tabla th {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 2px solid #e2e8f0;
+    color: #6b7280;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.hora-tabla td {
+    padding: 7px 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.hora-tabla tr:last-child td {
+    border-bottom: none;
+}
+
+.hora-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.diff-same {
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.diff-mas {
+    color: #D32F2F;
+    font-weight: 600;
+}
+
+.diff-menos {
+    color: #2196F3;
+    font-weight: 600;
+}
+
+.nota {
+    font-size: 0.75rem;
+    color: #8b95a5;
+}
+
+.hora-ahora {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+}
+
+.hora-utc {
+    font-size: 0.72rem;
+    color: #8b95a5;
+}
+
+@media (max-width: 700px) {
+    .hora-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .vista-toggle {
     display: flex;
     justify-content: center;
