@@ -11,9 +11,159 @@ body {
     min-height: 100vh;
 }
 
+.menu-superior {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #1a1a2e;
+    padding: 0 16px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    flex-wrap: wrap;
+}
+
+.menu-marca {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-right: 16px;
+    letter-spacing: 0.5px;
+}
+
+.menu-link {
+    color: #cbd5e1;
+    text-decoration: none;
+    padding: 14px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: color 0.15s;
+}
+
+.menu-link:hover {
+    color: #fff;
+}
+
+.menu-link.active {
+    color: #fff;
+    border-bottom-color: #FF9800;
+}
+
+.org {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 0;
+}
+
+.org-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.org-columns-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.org-columns {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 0 16px 16px;
+    width: max-content;
+    min-width: 100%;
+}
+
+.org-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.org-branch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.org-line-v {
+    width: 2px;
+    height: 24px;
+    background: #9aa4b2;
+}
+
+.org-children {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 24px;
+    position: relative;
+    padding-top: 24px;
+    flex-wrap: wrap;
+}
+
+.org-children::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: #9aa4b2;
+}
+
+.org-children > .org-branch {
+    position: relative;
+}
+
+.org-children > .org-branch::before {
+    content: '';
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    width: 2px;
+    height: 24px;
+    background: #9aa4b2;
+}
+
+.org-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #FF9800;
+    border-radius: 8px;
+    padding: 12px 18px;
+    text-align: center;
+    min-width: 200px;
+    max-width: 280px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.org-cargo {
+    font-size: 0.72rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.org-nombre {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+
 .container {
     max-width: 960px;
     margin: 0 auto;
+    padding: 16px;
+}
+
+.container-full {
+    width: 100%;
     padding: 16px;
 }
 

@@ -7,12 +7,10 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <nav id="menu" class="menu-superior"></nav>
     <div class="hora-container">
         <h1>DIFERENCIA HORARIA vs COLOMBIA</h1>
         <p class="hora-sub">Referencia: Colombia (UTC-5) · Zonas horarias: TimeZoneDB (CC BY 3.0)</p>
-        <div class="hora-volver">
-            <a class="nav-link" href="index.html">&#9664; VOLVER AL CALENDARIO</a>
-        </div>
         <div class="hora-grid">
             <div class="hora-tabla">
                 <h2>HORA ACTUAL (EN VIVO)</h2>
@@ -44,6 +42,7 @@
     </div>
 
     <script src="js/timezone-data.js"></script>
+    <script src="js/nav.js"></script>
     <script>
         const timezoneData = [
             { code: "CL", name: "Chile", color: "#D32F2F", zone: "America/Santiago" },
