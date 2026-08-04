@@ -56,7 +56,8 @@
             { code: "MX", name: "México", color: "#E91E63", zone: "America/Mexico_City" },
             { code: "NI", name: "Nicaragua", color: "#009688", zone: "America/Managua" },
             { code: "PA", name: "Panamá", color: "#607D8B", zone: "America/Panama" },
-            { code: "PE", name: "Perú", color: "#FF5722", zone: "America/Lima" }
+            { code: "PE", name: "Perú", color: "#FF5722", zone: "America/Lima" },
+            { code: "US", name: "EE. UU. (Miami)", color: "#3F51B5", zone: "America/New_York" }
         ];
 
         const staticData = [
@@ -70,7 +71,8 @@
             { code: "MX", diff: "-1h", periodo: "zona centro; sin cambio de horario" },
             { code: "NI", diff: "-1h", periodo: "diferencia fija todo el año" },
             { code: "PA", diff: "0h", periodo: "diferencia fija todo el año" },
-            { code: "PE", diff: "0h", periodo: "diferencia fija todo el año" }
+            { code: "PE", diff: "0h", periodo: "diferencia fija todo el año" },
+            { code: "US", diff: "", periodo: "" }
         ];
 
         function diffClass(diff) {
@@ -92,6 +94,13 @@
                     periodo = dstActive
                         ? "desde el 6 sep 2026 (horario de verano)"
                         : "hasta el 6 sep 2026; luego +2h (horario de verano)";
+                }
+                if (d.code === "US") {
+                    diff = formatDiff(getOffsetSeconds(c), getOffsetSeconds(colObj));
+                    const dstActive = getOffsetSeconds(c) === -14400;
+                    periodo = dstActive
+                        ? "hasta el 1 nov 2026; luego 0h (fin horario de verano)"
+                        : "desde el 1 nov 2026 (fin horario de verano)";
                 }
                 return `<tr>
                     <td><span class="hora-dot" style="background:${c.color}"></span>${c.name}</td>
