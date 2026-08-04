@@ -59,7 +59,7 @@
         ];
 
         const staticData = [
-            { code: "CL", diff: "+2h", periodo: "válido desde el 5 sep 2026 (horario de verano)" },
+            { code: "CL", diff: "+1h / +2h", periodo: "+1h hasta el 6 sep 2026; +2h desde el 6 sep (horario de verano)" },
             { code: "CO", diff: "0h", periodo: "país de referencia" },
             { code: "CR", diff: "-1h", periodo: "diferencia fija todo el año" },
             { code: "EC", diff: "0h", periodo: "continente; Galápagos -1h" },
@@ -90,7 +90,23 @@
             }).join("");
         }
 
+        function firstSunday(year, month) {
+            const d = new Date(Date.UTC(year, month, 1));
+            return 1 + ((7 - d.getUTCDay()) % 7);
+        }
+
+        function chileOffsetMinutes(date) {
+            const y = date.getUTCFullYear();
+            const dstStart = Date.UTC(y, 8, firstSunday(y, 8));
+            const dstEnd = Date.UTC(y, 3, firstSunday(y, 3));
+            const t = date.getTime();
+            return (t >= dstStart || t < dstEnd) ? -180 : -240;
+        }
+
         function getOffsetMinutes(tz) {
+            if (tz === "America/Santiago") {
+                return chileOffsetMinutes(new Date());
+            }
             const dtf = new Intl.DateTimeFormat("en-US", { timeZone: tz, timeZoneName: "longOffset" });
             const parts = dtf.formatToParts(new Date());
             const val = parts.find(p => p.type === "timeZoneName");
@@ -113,6 +129,17 @@
 
         function formatTime(tz) {
             const now = new Date();
+            if (tz === "America/Santiago") {
+                const off = chileOffsetMinutes(now);
+                const utc = now.getTime() + now.getTimezoneOffset() * 60000 + off * 60000;
+                const d = new Date(utc);
+                let h = d.getUTCHours();
+                const ampm = h >= 12 ? "p.m." : "a.m.";
+                h = h % 12; if (h === 0) h = 12;
+                const mm = String(d.getUTCMinutes()).padStart(2, "0");
+                const ss = String(d.getUTCSeconds()).padStart(2, "0");
+                return `${h}:${mm}:${ss} ${ampm}`;
+            }
             return new Intl.DateTimeFormat("es-CO", {
                 timeZone: tz,
                 hour: "2-digit",
@@ -123,6 +150,12 @@
         }
 
         function formatUtc(tz) {
+            if (tz === "America/Santiago") {
+                const off = chileOffsetMinutes(new Date());
+                const h = Math.floor(Math.abs(off) / 60);
+                const sign = off < 0 ? "-" : "+";
+                return "GMT" + sign + String(h).padStart(2, "0") + ":00";
+            }
             const now = new Date();
             return new Intl.DateTimeFormat("en-US", {
                 timeZone: tz,
