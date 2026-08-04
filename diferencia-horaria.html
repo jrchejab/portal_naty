@@ -60,7 +60,7 @@
         ];
 
         const staticData = [
-            { code: "CL", diff: "+1h / +2h", periodo: "+1h hasta el 6 sep 2026; +2h desde el 6 sep (horario de verano)" },
+            { code: "CL", diff: "", periodo: "" },
             { code: "CO", diff: "0h", periodo: "país de referencia" },
             { code: "CR", diff: "-1h", periodo: "diferencia fija todo el año" },
             { code: "EC", diff: "0h", periodo: "continente; Galápagos -1h" },
@@ -81,17 +81,27 @@
 
         function buildStatic() {
             const tbody = document.getElementById("tabla-estatica");
+            const colObj = timezoneData.find(t => t.code === "CO");
             tbody.innerHTML = staticData.map(d => {
                 const c = timezoneData.find(t => t.code === d.code);
+                let diff = d.diff;
+                let periodo = d.periodo;
+                if (d.code === "CL") {
+                    diff = formatDiff(getOffsetSeconds(c), getOffsetSeconds(colObj));
+                    const dstActive = getOffsetSeconds(c) === -10800;
+                    periodo = dstActive
+                        ? "desde el 6 sep 2026 (horario de verano)"
+                        : "hasta el 6 sep 2026; luego +2h (horario de verano)";
+                }
                 return `<tr>
                     <td><span class="hora-dot" style="background:${c.color}"></span>${c.name}</td>
-                    <td class="${diffClass(d.diff)}">${d.diff}</td>
-                    <td class="nota">${d.periodo}</td>
+                    <td class="${diffClass(diff)}">${diff}</td>
+                    <td class="nota">${periodo}</td>
                 </tr>`;
             }).join("");
         }
 
-        function getOffsetMinutes(country) {
+        function getOffsetSeconds(country) {
             const rows = timeZoneDb[country.zone];
             const now = Math.floor(Date.now() / 1000);
             let offset = rows[0][1];
@@ -105,21 +115,20 @@
             return offset;
         }
 
-        function formatDiff(colMin, cntMin) {
-            const diff = colMin - cntMin;
-            if (diff === 0) return "0h";
-            const abs = Math.abs(diff);
+        function formatDiff(cntSec, colSec) {
+            const diffMin = (cntSec - colSec) / 60;
+            if (diffMin === 0) return "0h";
+            const sign = diffMin > 0 ? "+" : "-";
+            const abs = Math.abs(diffMin);
             const h = Math.floor(abs / 60);
-            const m = abs % 60;
-            const txt = (h ? h + "h" : "") + (m ? (m < 10 ? "0" : "") + m + "m" : "");
-            return (diff > 0 ? "+" : "-") + (txt || "0h");
+            const m = Math.round(abs % 60);
+            const txt = (h ? h + "h" : "") + (m ? String(m).padStart(2, "0") + "m" : "");
+            return sign + (txt || "0h");
         }
 
         function formatTime(country) {
-            const now = new Date();
-            const off = getOffsetMinutes(country);
-            const local = now.getTime() + now.getTimezoneOffset() * 60000 + off * 60000;
-            const d = new Date(local);
+            const offSec = getOffsetSeconds(country);
+            const d = new Date(Date.now() + offSec * 1000);
             let h = d.getUTCHours();
             const ampm = h >= 12 ? "p.m." : "a.m.";
             h = h % 12; if (h === 0) h = 12;
@@ -129,19 +138,21 @@
         }
 
         function formatUtc(country) {
-            const off = getOffsetMinutes(country);
-            const h = Math.floor(Math.abs(off) / 60);
-            const mm = (Math.abs(off) % 60);
-            const sign = off < 0 ? "-" : "+";
-            return "GMT" + sign + String(h).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
+            const offSec = getOffsetSeconds(country);
+            const totalMin = Math.round(offSec / 60);
+            const sign = totalMin < 0 ? "-" : "+";
+            const abs = Math.abs(totalMin);
+            const h = String(Math.floor(abs / 60)).padStart(2, "0");
+            const m = String(abs % 60).padStart(2, "0");
+            return "GMT" + sign + h + ":" + m;
         }
 
         function updateDynamic() {
             const tbody = document.getElementById("tabla-dinamica");
-            const colMin = getOffsetMinutes(timezoneData.find(t => t.code === "CO"));
+            const colSec = getOffsetSeconds(timezoneData.find(t => t.code === "CO"));
             tbody.innerHTML = timezoneData.map(t => {
-                const cntMin = getOffsetMinutes(t);
-                const diff = formatDiff(cntMin, colMin);
+                const cntSec = getOffsetSeconds(t);
+                const diff = formatDiff(cntSec, colSec);
                 return `<tr>
                     <td><span class="hora-dot" style="background:${t.color}"></span>${t.name}</td>
                     <td>
