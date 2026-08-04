@@ -9,7 +9,7 @@
 <body>
     <div class="hora-container">
         <h1>DIFERENCIA HORARIA vs COLOMBIA</h1>
-        <p class="hora-sub">Referencia: Colombia (UTC-5)</p>
+        <p class="hora-sub">Referencia: Colombia (UTC-5) · Zonas horarias: TimeZoneDB (CC BY 3.0)</p>
         <div class="hora-volver">
             <a class="nav-link" href="index.html">&#9664; VOLVER AL CALENDARIO</a>
         </div>
@@ -43,19 +43,20 @@
         </div>
     </div>
 
+    <script src="js/timezone-data.js"></script>
     <script>
         const timezoneData = [
-            { code: "CL", name: "Chile", color: "#D32F2F", offset: null },
-            { code: "CO", name: "Colombia", color: "#FF9800", offset: -300 },
-            { code: "CR", name: "Costa Rica", color: "#4CAF50", offset: -360 },
-            { code: "EC", name: "Ecuador", color: "#2196F3", offset: -300 },
-            { code: "SV", name: "El Salvador", color: "#9C27B0", offset: -360 },
-            { code: "GT", name: "Guatemala", color: "#00BCD4", offset: -360 },
-            { code: "HN", name: "Honduras", color: "#FFC107", offset: -360 },
-            { code: "MX", name: "México", color: "#E91E63", offset: -360 },
-            { code: "NI", name: "Nicaragua", color: "#009688", offset: -360 },
-            { code: "PA", name: "Panamá", color: "#607D8B", offset: -300 },
-            { code: "PE", name: "Perú", color: "#FF5722", offset: -300 }
+            { code: "CL", name: "Chile", color: "#D32F2F", zone: "America/Santiago" },
+            { code: "CO", name: "Colombia", color: "#FF9800", zone: "America/Bogota" },
+            { code: "CR", name: "Costa Rica", color: "#4CAF50", zone: "America/Costa_Rica" },
+            { code: "EC", name: "Ecuador", color: "#2196F3", zone: "America/Guayaquil" },
+            { code: "SV", name: "El Salvador", color: "#9C27B0", zone: "America/El_Salvador" },
+            { code: "GT", name: "Guatemala", color: "#00BCD4", zone: "America/Guatemala" },
+            { code: "HN", name: "Honduras", color: "#FFC107", zone: "America/Tegucigalpa" },
+            { code: "MX", name: "México", color: "#E91E63", zone: "America/Mexico_City" },
+            { code: "NI", name: "Nicaragua", color: "#009688", zone: "America/Managua" },
+            { code: "PA", name: "Panamá", color: "#607D8B", zone: "America/Panama" },
+            { code: "PE", name: "Perú", color: "#FF5722", zone: "America/Lima" }
         ];
 
         const staticData = [
@@ -90,21 +91,18 @@
             }).join("");
         }
 
-        function firstSunday(year, month) {
-            const d = new Date(Date.UTC(year, month, 1));
-            return 1 + ((7 - d.getUTCDay()) % 7);
-        }
-
-        function chileOffsetMinutes(date) {
-            const y = date.getUTCFullYear();
-            const dstStart = Date.UTC(y, 8, firstSunday(y, 8));
-            const dstEnd = Date.UTC(y, 3, firstSunday(y, 3));
-            const t = date.getTime();
-            return (t >= dstStart || t < dstEnd) ? -180 : -240;
-        }
-
         function getOffsetMinutes(country) {
-            return country.offset === null ? chileOffsetMinutes(new Date()) : country.offset;
+            const rows = timeZoneDb[country.zone];
+            const now = Math.floor(Date.now() / 1000);
+            let offset = rows[0][1];
+            for (const r of rows) {
+                if (r[0] <= now) {
+                    offset = r[1];
+                } else {
+                    break;
+                }
+            }
+            return offset;
         }
 
         function formatDiff(colMin, cntMin) {
