@@ -45,17 +45,17 @@
 
     <script>
         const timezoneData = [
-            { code: "CL", name: "Chile", color: "#D32F2F", tz: "America/Santiago" },
-            { code: "CO", name: "Colombia", color: "#FF9800", tz: "America/Bogota" },
-            { code: "CR", name: "Costa Rica", color: "#4CAF50", tz: "America/Costa_Rica" },
-            { code: "EC", name: "Ecuador", color: "#2196F3", tz: "America/Guayaquil" },
-            { code: "SV", name: "El Salvador", color: "#9C27B0", tz: "America/El_Salvador" },
-            { code: "GT", name: "Guatemala", color: "#00BCD4", tz: "America/Guatemala" },
-            { code: "HN", name: "Honduras", color: "#FFC107", tz: "America/Tegucigalpa" },
-            { code: "MX", name: "México", color: "#E91E63", tz: "America/Mexico_City" },
-            { code: "NI", name: "Nicaragua", color: "#009688", tz: "America/Managua" },
-            { code: "PA", name: "Panamá", color: "#607D8B", tz: "America/Panama" },
-            { code: "PE", name: "Perú", color: "#FF5722", tz: "America/Lima" }
+            { code: "CL", name: "Chile", color: "#D32F2F", offset: null },
+            { code: "CO", name: "Colombia", color: "#FF9800", offset: -300 },
+            { code: "CR", name: "Costa Rica", color: "#4CAF50", offset: -360 },
+            { code: "EC", name: "Ecuador", color: "#2196F3", offset: -300 },
+            { code: "SV", name: "El Salvador", color: "#9C27B0", offset: -360 },
+            { code: "GT", name: "Guatemala", color: "#00BCD4", offset: -360 },
+            { code: "HN", name: "Honduras", color: "#FFC107", offset: -360 },
+            { code: "MX", name: "México", color: "#E91E63", offset: -360 },
+            { code: "NI", name: "Nicaragua", color: "#009688", offset: -360 },
+            { code: "PA", name: "Panamá", color: "#607D8B", offset: -300 },
+            { code: "PE", name: "Perú", color: "#FF5722", offset: -300 }
         ];
 
         const staticData = [
@@ -103,18 +103,8 @@
             return (t >= dstStart || t < dstEnd) ? -180 : -240;
         }
 
-        function getOffsetMinutes(tz) {
-            if (tz === "America/Santiago") {
-                return chileOffsetMinutes(new Date());
-            }
-            const dtf = new Intl.DateTimeFormat("en-US", { timeZone: tz, timeZoneName: "longOffset" });
-            const parts = dtf.formatToParts(new Date());
-            const val = parts.find(p => p.type === "timeZoneName");
-            if (!val) return 0;
-            const m = val.value.match(/GMT([+-])(\d{1,2})(?::(\d{2}))?/);
-            if (!m) return 0;
-            const sign = m[1] === "-" ? -1 : 1;
-            return sign * (parseInt(m[2], 10) * 60 + (m[3] ? parseInt(m[3], 10) : 0));
+        function getOffsetMinutes(country) {
+            return country.offset === null ? chileOffsetMinutes(new Date()) : country.offset;
         }
 
         function formatDiff(colMin, cntMin) {
@@ -127,53 +117,38 @@
             return (diff > 0 ? "+" : "-") + (txt || "0h");
         }
 
-        function formatTime(tz) {
+        function formatTime(country) {
             const now = new Date();
-            if (tz === "America/Santiago") {
-                const off = chileOffsetMinutes(now);
-                const utc = now.getTime() + now.getTimezoneOffset() * 60000 + off * 60000;
-                const d = new Date(utc);
-                let h = d.getUTCHours();
-                const ampm = h >= 12 ? "p.m." : "a.m.";
-                h = h % 12; if (h === 0) h = 12;
-                const mm = String(d.getUTCMinutes()).padStart(2, "0");
-                const ss = String(d.getUTCSeconds()).padStart(2, "0");
-                return `${h}:${mm}:${ss} ${ampm}`;
-            }
-            return new Intl.DateTimeFormat("es-CO", {
-                timeZone: tz,
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-                hour12: true
-            }).format(now);
+            const off = getOffsetMinutes(country);
+            const local = now.getTime() + now.getTimezoneOffset() * 60000 + off * 60000;
+            const d = new Date(local);
+            let h = d.getUTCHours();
+            const ampm = h >= 12 ? "p.m." : "a.m.";
+            h = h % 12; if (h === 0) h = 12;
+            const mm = String(d.getUTCMinutes()).padStart(2, "0");
+            const ss = String(d.getUTCSeconds()).padStart(2, "0");
+            return `${h}:${mm}:${ss} ${ampm}`;
         }
 
-        function formatUtc(tz) {
-            if (tz === "America/Santiago") {
-                const off = chileOffsetMinutes(new Date());
-                const h = Math.floor(Math.abs(off) / 60);
-                const sign = off < 0 ? "-" : "+";
-                return "GMT" + sign + String(h).padStart(2, "0") + ":00";
-            }
-            const now = new Date();
-            return new Intl.DateTimeFormat("en-US", {
-                timeZone: tz,
-                timeZoneName: "shortOffset"
-            }).formatToParts(now).find(p => p.type === "timeZoneName").value;
+        function formatUtc(country) {
+            const off = getOffsetMinutes(country);
+            const h = Math.floor(Math.abs(off) / 60);
+            const mm = (Math.abs(off) % 60);
+            const sign = off < 0 ? "-" : "+";
+            return "GMT" + sign + String(h).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
         }
 
         function updateDynamic() {
             const tbody = document.getElementById("tabla-dinamica");
-            const colMin = getOffsetMinutes("America/Bogota");
+            const colMin = getOffsetMinutes(timezoneData.find(t => t.code === "CO"));
             tbody.innerHTML = timezoneData.map(t => {
-                const cntMin = getOffsetMinutes(t.tz);
+                const cntMin = getOffsetMinutes(t);
                 const diff = formatDiff(cntMin, colMin);
                 return `<tr>
                     <td><span class="hora-dot" style="background:${t.color}"></span>${t.name}</td>
                     <td>
-                        <span class="hora-ahora">${formatTime(t.tz)}</span>
-                        <span class="hora-utc">${formatUtc(t.tz)}</span>
+                        <span class="hora-ahora">${formatTime(t)}</span>
+                        <span class="hora-utc">${formatUtc(t)}</span>
                     </td>
                     <td class="${diffClass(diff)}">${diff}</td>
                 </tr>`;
