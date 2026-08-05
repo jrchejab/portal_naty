@@ -115,7 +115,6 @@ body {
     align-items: flex-start;
     gap: 24px;
     position: relative;
-    padding-top: 12px;
     flex-wrap: wrap;
 }
 
@@ -124,11 +123,10 @@ body {
     border: 1px solid #e2e8f0;
     border-left: 4px solid #94a3b8;
     border-radius: 8px;
-    padding: 12px 18px;
+    padding: 10px 14px;
     text-align: center;
-    min-width: 200px;
-    max-width: 280px;
-    min-height: 72px;
+    width: 230px;
+    min-height: 96px;
     display: flex;
     flex-direction: column;
     justify-content: center;

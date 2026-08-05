@@ -34,7 +34,7 @@ const organigrama = {
                             nombre: "Roberto Cordoba",
                             cargo: ["Product Director", "Volume"],
                             hijos: [
-                                { nombre: "Marella Sarmiento", cargo: "Product Manager Vs Volumne McAfee", hijos: [] }
+                                { nombre: "Marella Sarmiento", cargo: "Product Manager Vs Volume McAfee", hijos: [] }
                             ]
                         }
                     ]
