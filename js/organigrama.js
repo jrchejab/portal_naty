@@ -3,20 +3,24 @@ const organigrama = {
     cargo: "Volume Productor Director Systems",
     hijos: [
         {
-            nombre: "Natalia Santamaria",
-            cargo: "Product Manager Multicountry VS Volume",
+            nombre: "Sergio Lievano",
+            cargo: "Gerente Intcomex Colombia",
             hijos: [
                 {
-                    codigo: "GT", nombre: "Guatemala", cargo: "País", color: "#00BCD4", hijos: [
+                    nombre: "Natalia Santamaria",
+                    cargo: "Product Manager Multicountry VS Volume",
+                    hijos: [
                         {
-                            nombre: "Alejandro",
-                            cargo: ["Product Division Director", "Volume", "Vs Volume"],
-                            hijos: [
-                                { nombre: "Sin definir", cargo: "Product Manager", hijos: [] }
+                            codigo: "GT", nombre: "Guatemala", cargo: "País", color: "#00BCD4", hijos: [
+                                {
+                                    nombre: "Alejandro",
+                                    cargo: ["Product Division Director", "Volume", "Vs Volume"],
+                                    hijos: [
+                                        { nombre: "No Hay", cargo: "Product Manager", hijos: [] }
+                                    ]
+                                }
                             ]
-                        }
-                    ]
-                },
+                        },
                 {
                     codigo: "SV", nombre: "El Salvador", cargo: "País", color: "#9C27B0", hijos: [
                         {
@@ -86,16 +90,10 @@ const organigrama = {
                 {
                     codigo: "CO", nombre: "Colombia", cargo: "País", color: "#FF9800", hijos: [
                         {
-                            nombre: "Sergio Lievano",
-                            cargo: "Gerente Intcomex Colombia",
+                            nombre: "Javier Succar",
+                            cargo: "Product Division Director Vs Volume Consumo",
                             hijos: [
-                                {
-                                    nombre: "Javier Succar",
-                                    cargo: "Product Division Director Vs Volume Consumo",
-                                    hijos: [
-                                        { nombre: "Cristian Rios", cargo: "Product Manager Consumo", hijos: [] }
-                                    ]
-                                }
+                                { nombre: "Cristian Rios", cargo: "Product Manager Consumo", hijos: [] }
                             ]
                         }
                     ]
@@ -105,6 +103,8 @@ const organigrama = {
                 { codigo: "NI", nombre: "Nicaragua", cargo: "País", color: "#009688", hijos: [], datos: {} }
             ]
         }
+        ]
+    }
     ]
 };
 
@@ -145,24 +145,23 @@ function renderOrg() {
     const container = document.getElementById("org-tree");
     if (!container) return;
 
-    const root = organigrama;
-    const mid = root.hijos || [];
-    const columns = [];
-    for (const m of mid) {
-        for (const c of (m.hijos || [])) {
-            columns.push(c);
-        }
+    const chain = [organigrama];
+    let cur = organigrama;
+    while (cur.hijos && cur.hijos.length && !cur.hijos.every(h => h.color)) {
+        cur = cur.hijos[0];
+        chain.push(cur);
     }
+    const columns = (cur.hijos || []).filter(h => h.color);
 
-    let html = `<div class="org-top">${renderCard(root, 0)}</div>`;
-    for (const m of mid) {
-        html += '<div class="org-line-v"></div>';
-        html += `<div class="org-top">${renderCard(m, 1)}</div>`;
-    }
+    let html = chain.map((n, i) =>
+        (i > 0 ? '<div class="org-line-v"></div>' : '') +
+        `<div class="org-top">${renderCard(n, i)}</div>`
+    ).join("");
+
     if (columns.length) {
         html += '<div class="org-line-v"></div>';
         html += '<div class="org-columns-wrap"><div class="org-columns">';
-        html += columns.map(c => `<div class="org-column">${renderBranch(c, 2)}</div>`).join("");
+        html += columns.map(c => `<div class="org-column">${renderBranch(c, chain.length)}</div>`).join("");
         html += '</div></div>';
     }
     container.innerHTML = html;
