@@ -105,7 +105,7 @@ body {
 
 .org-line-v {
     width: 2px;
-    height: 24px;
+    height: 34px;
     background: #9aa4b2;
 }
 
@@ -115,32 +115,8 @@ body {
     align-items: flex-start;
     gap: 24px;
     position: relative;
-    padding-top: 24px;
+    padding-top: 12px;
     flex-wrap: wrap;
-}
-
-.org-children::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 10%;
-    right: 10%;
-    height: 2px;
-    background: #9aa4b2;
-}
-
-.org-children > .org-branch {
-    position: relative;
-}
-
-.org-children > .org-branch::before {
-    content: '';
-    position: absolute;
-    top: -24px;
-    left: 50%;
-    width: 2px;
-    height: 24px;
-    background: #9aa4b2;
 }
 
 .org-card {
@@ -152,6 +128,11 @@ body {
     text-align: center;
     min-width: 200px;
     max-width: 280px;
+    min-height: 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
