@@ -21,7 +21,7 @@ const organigrama = {
                     codigo: "SV", nombre: "El Salvador", cargo: "País", color: "#9C27B0", hijos: [
                         {
                             nombre: "",
-                            cargo: "Product Division Manager Sr Vs Volumne",
+                            cargo: ["Product Division Manager Sr", "VS Volume"],
                             hijos: [
                                 { nombre: "Beatriz Bonilla", cargo: "Product Manager McAfee", hijos: [] }
                             ]
@@ -32,7 +32,7 @@ const organigrama = {
                     codigo: "PE", nombre: "Perú", cargo: "País", color: "#FF5722", hijos: [
                         {
                             nombre: "Roberto Cordoba",
-                            cargo: "Product Director Vs Volume",
+                            cargo: ["Product Director", "Volume"],
                             hijos: [
                                 { nombre: "Marella Sarmiento", cargo: "Product Manager Vs Volumne McAfee", hijos: [] }
                             ]
@@ -43,7 +43,7 @@ const organigrama = {
                     codigo: "CL", nombre: "Chile", cargo: "País", color: "#D32F2F", hijos: [
                         {
                             nombre: "Daniel",
-                            cargo: "Product Director",
+                            cargo: ["Sales Manager", "Top Consumer", "CS Top Consumer"],
                             hijos: [
                                 { nombre: "Maxely Guzman", cargo: "Product Manager McAfee", hijos: [] }
                             ]
@@ -65,7 +65,7 @@ const organigrama = {
                     codigo: "PA", nombre: "Panamá", cargo: "País", color: "#607D8B", hijos: [
                         {
                             nombre: "Veronica Bonilla",
-                            cargo: "Product Division Director Vs Volumne",
+                            cargo: ["Product Division Director", "Volume"],
                             hijos: [
                                 { nombre: "Claudia Sanchez", cargo: "Product Manager McAfee Vs Volume", hijos: [] }
                             ]
@@ -76,7 +76,7 @@ const organigrama = {
                     codigo: "MX", nombre: "México", cargo: "País", color: "#E91E63", hijos: [
                         {
                             nombre: "Veronica Ortega",
-                            cargo: "Product Director Vs Volume",
+                            cargo: ["Product Director", "Volume"],
                             hijos: [
                                 { nombre: "Deniesse Rios", cargo: "Product Manager McAfee Vs Volume", hijos: [] }
                             ]
