@@ -109,10 +109,6 @@ body {
     background: #9aa4b2;
 }
 
-.org-line-v-lg {
-    height: 130px;
-}
-
 .org-children {
     display: flex;
     justify-content: center;
