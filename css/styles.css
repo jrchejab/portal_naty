@@ -81,6 +81,20 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+}
+
+.org-flotante {
+    position: absolute;
+    top: -38px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 6;
+}
+
+.org-flotante .org-card {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+    border: 1px solid #cbd5e1;
 }
 
 .org-branch {

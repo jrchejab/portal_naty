@@ -3,13 +3,9 @@ const organigrama = {
     cargo: "Volume Productor Director Systems",
     hijos: [
         {
-            nombre: "Sergio Lievano",
-            cargo: "Gerente Intcomex Colombia",
+            nombre: "Natalia Santamaria",
+            cargo: "Product Manager Multicountry VS Volume",
             hijos: [
-                {
-                    nombre: "Natalia Santamaria",
-                    cargo: "Product Manager Multicountry VS Volume",
-                    hijos: [
                         {
                             codigo: "GT", nombre: "Guatemala", cargo: "País", color: "#00BCD4", hijos: [
                                 {
@@ -88,7 +84,9 @@ const organigrama = {
                     ]
                 },
                 {
-                    codigo: "CO", nombre: "Colombia", cargo: "País", color: "#FF9800", hijos: [
+                    codigo: "CO", nombre: "Colombia", cargo: "País", color: "#FF9800",
+                    flotante: { nombre: "Sergio Lievano", cargo: "Gerente Intcomex Colombia" },
+                    hijos: [
                         {
                             nombre: "Javier Succar",
                             cargo: "Product Division Director Vs Volume Consumo",
@@ -103,8 +101,6 @@ const organigrama = {
                 { codigo: "NI", nombre: "Nicaragua", cargo: "País", color: "#009688", hijos: [], datos: {} }
             ]
         }
-        ]
-    }
     ]
 };
 
@@ -129,12 +125,16 @@ function renderCard(node, depth) {
 }
 
 function renderBranch(node, depth) {
+    const floatHtml = node.flotante
+        ? `<div class="org-flotante">${renderCard(node.flotante, depth)}</div>`
+        : "";
     const card = renderCard(node, depth);
     if (!node.hijos || node.hijos.length === 0) {
-        return `<div class="org-branch">${card}</div>`;
+        return `<div class="org-branch">${floatHtml}${card}</div>`;
     }
     const children = node.hijos.map(c => renderBranch(c, depth + 1)).join("");
     return `<div class="org-branch">
+        ${floatHtml}
         ${card}
         <div class="org-line-v"></div>
         <div class="org-children">${children}</div>
