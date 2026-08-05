@@ -42,7 +42,7 @@ const organigrama = {
                 {
                     codigo: "CL", nombre: "Chile", cargo: "País", color: "#D32F2F", hijos: [
                         {
-                            nombre: "Daniel",
+                            nombre: "Daniel Bakovic",
                             cargo: ["Sales Manager", "Top Consumer", "CS Top Consumer"],
                             hijos: [
                                 { nombre: "Maxely Guzman", cargo: "Product Manager McAfee", hijos: [] }
