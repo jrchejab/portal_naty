@@ -10,7 +10,7 @@ const organigrama = {
                     codigo: "GT", nombre: "Guatemala", cargo: "País", color: "#00BCD4", hijos: [
                         {
                             nombre: "Alejandro",
-                            cargo: "Product Division Director - Volume",
+                            cargo: ["Product Division Director", "Volume", "Vs Volume"],
                             hijos: [
                                 { nombre: "Sin definir", cargo: "Product Manager", hijos: [] }
                             ]
@@ -108,10 +108,19 @@ const organigrama = {
     ]
 };
 
+function cargoLines(cargo) {
+    if (Array.isArray(cargo)) return cargo;
+    return String(cargo)
+        .split(/\s+-\s+/)
+        .flatMap(seg => seg.split(/\s+Vs\s+/i));
+}
+
 function renderCard(node, depth) {
     const border = node.color ? `border-left:4px solid ${node.color};` : "";
     const cls = node.color ? "org-card" : `org-card org-role org-role-${Math.min(depth, 4)}`;
-    const cargoHtml = node.nombre ? `<div class="org-cargo">${node.cargo}</div>` : "";
+    const cargoHtml = node.nombre
+        ? `<div class="org-cargo">${cargoLines(node.cargo).map(l => `<div>${l}</div>`).join("")}</div>`
+        : "";
     const nombre = node.nombre || node.cargo;
     return `<div class="${cls}" style="${border}">
         ${cargoHtml}
