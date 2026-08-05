@@ -132,13 +132,29 @@ body {
 .org-card {
     background: #fff;
     border: 1px solid #e2e8f0;
-    border-left: 4px solid #FF9800;
+    border-left: 4px solid #94a3b8;
     border-radius: 8px;
     padding: 12px 18px;
     text-align: center;
     min-width: 200px;
     max-width: 280px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.org-role-0 {
+    border-left-color: #334155;
+    background: #f1f5f9;
+}
+
+.org-role-1 {
+    border-left-color: #64748b;
+    background: #f8fafc;
+}
+
+.org-role-2,
+.org-role-3,
+.org-role-4 {
+    border-left-color: #94a3b8;
 }
 
 .org-cargo {

@@ -108,22 +108,23 @@ const organigrama = {
     ]
 };
 
-function renderCard(node) {
+function renderCard(node, depth) {
     const border = node.color ? `border-left:4px solid ${node.color};` : "";
+    const cls = node.color ? "org-card" : `org-card org-role org-role-${Math.min(depth, 4)}`;
     const cargoHtml = node.nombre ? `<div class="org-cargo">${node.cargo}</div>` : "";
     const nombre = node.nombre || node.cargo;
-    return `<div class="org-card" style="${border}">
+    return `<div class="${cls}" style="${border}">
         ${cargoHtml}
         <div class="org-nombre">${nombre}</div>
     </div>`;
 }
 
-function renderBranch(node) {
-    const card = renderCard(node);
+function renderBranch(node, depth) {
+    const card = renderCard(node, depth);
     if (!node.hijos || node.hijos.length === 0) {
         return `<div class="org-branch">${card}</div>`;
     }
-    const children = node.hijos.map(renderBranch).join("");
+    const children = node.hijos.map(c => renderBranch(c, depth + 1)).join("");
     return `<div class="org-branch">
         ${card}
         <div class="org-line-v"></div>
@@ -144,15 +145,15 @@ function renderOrg() {
         }
     }
 
-    let html = `<div class="org-top">${renderCard(root)}</div>`;
+    let html = `<div class="org-top">${renderCard(root, 0)}</div>`;
     for (const m of mid) {
         html += '<div class="org-line-v"></div>';
-        html += `<div class="org-top">${renderCard(m)}</div>`;
+        html += `<div class="org-top">${renderCard(m, 1)}</div>`;
     }
     if (columns.length) {
         html += '<div class="org-line-v"></div>';
         html += '<div class="org-columns-wrap"><div class="org-columns">';
-        html += columns.map(c => `<div class="org-column">${renderBranch(c)}</div>`).join("");
+        html += columns.map(c => `<div class="org-column">${renderBranch(c, 2)}</div>`).join("");
         html += '</div></div>';
     }
     container.innerHTML = html;
