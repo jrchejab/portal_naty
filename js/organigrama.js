@@ -20,7 +20,7 @@ const organigrama = {
                 {
                     codigo: "SV", nombre: "El Salvador", cargo: "País", color: "#9C27B0", hijos: [
                         {
-                            nombre: "",
+                            nombre: "Laura Castillo Romero",
                             cargo: ["Product Division Manager Sr", "VS Volume"],
                             hijos: [
                                 { nombre: "Beatriz Bonilla", cargo: "Product Manager McAfee", hijos: [] }
