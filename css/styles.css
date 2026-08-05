@@ -86,7 +86,7 @@ body {
 
 .org-flotante {
     position: absolute;
-    top: -38px;
+    top: -150px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 6;
@@ -107,6 +107,10 @@ body {
     width: 2px;
     height: 24px;
     background: #9aa4b2;
+}
+
+.org-line-v-lg {
+    height: 130px;
 }
 
 .org-children {

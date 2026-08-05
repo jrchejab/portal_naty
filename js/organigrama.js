@@ -153,10 +153,11 @@ function renderOrg() {
     }
     const columns = (cur.hijos || []).filter(h => h.color);
 
-    let html = chain.map((n, i) =>
-        (i > 0 ? '<div class="org-line-v"></div>' : '') +
-        `<div class="org-top">${renderCard(n, i)}</div>`
-    ).join("");
+    let html = chain.map((n, i) => {
+        const cls = i === 1 ? "org-line-v org-line-v-lg" : "org-line-v";
+        return (i > 0 ? `<div class="${cls}"></div>` : '') +
+            `<div class="org-top">${renderCard(n, i)}</div>`;
+    }).join("");
 
     if (columns.length) {
         html += '<div class="org-line-v"></div>';
