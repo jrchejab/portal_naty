@@ -212,6 +212,11 @@ function renderAll() {
 
 function abrirModal(registro) {
     editandoId = registro ? registro.id : null;
+
+    const dl = document.getElementById("lista-canales");
+    const canales = [...new Set(clientes.map(c => (c.canal || "").trim()).filter(Boolean))].sort();
+    dl.innerHTML = canales.map(x => `<option value="${esc(x)}"></option>`).join("");
+
     document.getElementById("crm-modal-titulo").textContent = registro ? "EDITAR REGISTRO" : "NUEVO REGISTRO";
     document.getElementById("f-canal").value = registro ? registro.canal : "";
     document.getElementById("f-region").value = registro ? registro.region : "";
