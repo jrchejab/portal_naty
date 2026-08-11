@@ -272,11 +272,11 @@ body {
     border: 1px solid #e2e8f0;
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    padding: 12px 14px;
+    padding: 14px 16px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    min-width: 320px;
+    gap: 12px;
+    min-width: 420px;
 }
 
 .crm-fechas-acciones {
@@ -287,24 +287,29 @@ body {
 
 .crm-rango {
     display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 5px;
     font-size: 0.75rem;
 }
 
 .crm-rango-nombre {
     font-weight: 600;
     color: #374151;
-    white-space: nowrap;
-    min-width: 110px;
+    font-size: 0.78rem;
 }
 
-.crm-rango input[type="date"] {
-    padding: 5px 8px;
+.crm-rango-campos {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.crm-rango-campos input[type="date"] {
+    flex: 1;
+    padding: 6px 8px;
     border: 1px solid #d0d5dd;
     border-radius: 8px;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     background: #fff;
 }
 

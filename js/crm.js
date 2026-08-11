@@ -26,6 +26,7 @@ const REGIONES = [
 
 const STORAGE_KEY = "crm_clientes_v1";
 const NOTES_KEY = "crm_notas_v1";
+const MIGRADO_KEY = "crm_fechas_migrado_v1";
 const API_URL = "api.php";
 
 let clientes = [];
@@ -35,19 +36,20 @@ let usandoAPI = true;
 let regionPorCanal = {};
 
 function seedData() {
+    const hoy = new Date().toISOString().slice(0, 10);
     return [
-        { region: "Costa Rica", canal: "Intelec", linea: "MT1", sku: "SE000MCA02", unidades: 250, promo: "SKUPROMO", skuPromo: "PROMO2026Q311926", precioCliente: 5.54, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-01", estado: "Facturado", observaciones: "" },
-        { region: "Salvador", canal: "almacenes Siman", linea: "MT1", sku: "SE000MCA02", unidades: 200, promo: "SKUPROMO", skuPromo: "PROMO2026Q311925", precioCliente: 7.3, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-01", estado: "Facturado", observaciones: "" },
-        { region: "Salvador", canal: "Gmg", linea: "MT1", sku: "SE000MCA02", unidades: 10, promo: "SKUPROMO", skuPromo: "PROMO2026Q311925", precioCliente: 7.3, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-02", estado: "Enviado a Facturar", observaciones: "" },
-        { region: "Salvador", canal: "Acer", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 7.3, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-02", estado: "Pendiente confirmacion PM", observaciones: "" },
-        { region: "Salvador", canal: "Lenovo", linea: "MT1", sku: "SE000MCA02", unidades: 190, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-03", estado: "Pendiente confirmacion PM", observaciones: "" },
-        { region: "Salvador", canal: "HP", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-03", estado: "Pendiente SKU promo y Carta", observaciones: "" },
-        { region: "Regional", canal: "Intcomex", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 7.3, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-04", estado: "Pendiente lanzamiento", observaciones: "" },
-        { region: "US", canal: "Intcomex", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-04", estado: "Pendiente lanzamiento", observaciones: "" },
-        { region: "Salvador", canal: "Lenovo", linea: "MT1", sku: "SE000MCA02", unidades: 1000, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-04", estado: "En Negociacion", observaciones: "" },
-        { region: "Venezuela", canal: "X5server", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 14.6, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-01", estado: "Cotizacion", observaciones: "" },
-        { region: "Chile", canal: "Paris", linea: "MT1", sku: "SE000MCA02", unidades: 50, promo: "", skuPromo: "", precioCliente: 14.6, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-02", estado: "Cotizacion", observaciones: "" },
-        { region: "Peru", canal: "connecta", linea: "MT1", sku: "SE000MCA02", unidades: 2000, promo: "", skuPromo: "", precioCliente: 14.6, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-03", estado: "Cotizacion", observaciones: "" }
+        { region: "Costa Rica", canal: "Intelec", linea: "MT1", sku: "SE000MCA02", unidades: 250, promo: "SKUPROMO", skuPromo: "PROMO2026Q311926", precioCliente: 5.54, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: hoy, fechaEstado: hoy, estado: "Facturado", observaciones: "" },
+        { region: "Salvador", canal: "almacenes Siman", linea: "MT1", sku: "SE000MCA02", unidades: 200, promo: "SKUPROMO", skuPromo: "PROMO2026Q311925", precioCliente: 7.3, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: hoy, fechaEstado: hoy, estado: "Facturado", observaciones: "" },
+        { region: "Salvador", canal: "Gmg", linea: "MT1", sku: "SE000MCA02", unidades: 10, promo: "SKUPROMO", skuPromo: "PROMO2026Q311925", precioCliente: 7.3, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: hoy, fechaEstado: hoy, estado: "Enviado a Facturar", observaciones: "" },
+        { region: "Salvador", canal: "Acer", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 7.3, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: hoy, fechaEstado: hoy, estado: "Pendiente confirmacion PM", observaciones: "" },
+        { region: "Salvador", canal: "Lenovo", linea: "MT1", sku: "SE000MCA02", unidades: 190, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: hoy, fechaEstado: hoy, estado: "Pendiente confirmacion PM", observaciones: "" },
+        { region: "Salvador", canal: "HP", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: hoy, fechaEstado: hoy, estado: "Pendiente SKU promo y Carta", observaciones: "" },
+        { region: "Regional", canal: "Intcomex", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 7.3, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: hoy, fechaEstado: hoy, estado: "Pendiente lanzamiento", observaciones: "" },
+        { region: "US", canal: "Intcomex", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: hoy, fechaEstado: hoy, estado: "Pendiente lanzamiento", observaciones: "" },
+        { region: "Salvador", canal: "Lenovo", linea: "MT1", sku: "SE000MCA02", unidades: 1000, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: hoy, fechaEstado: hoy, estado: "En Negociacion", observaciones: "" },
+        { region: "Venezuela", canal: "X5server", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 14.6, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: hoy, fechaEstado: hoy, estado: "Cotizacion", observaciones: "" },
+        { region: "Chile", canal: "Paris", linea: "MT1", sku: "SE000MCA02", unidades: 50, promo: "", skuPromo: "", precioCliente: 14.6, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: hoy, fechaEstado: hoy, estado: "Cotizacion", observaciones: "" },
+        { region: "Peru", canal: "connecta", linea: "MT1", sku: "SE000MCA02", unidades: 2000, promo: "", skuPromo: "", precioCliente: 14.6, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: hoy, fechaEstado: hoy, estado: "Cotizacion", observaciones: "" }
     ];
 }
 
@@ -64,6 +66,22 @@ function normalizarIds(arr) {
     return arr.map((c, i) => (c && c.id ? c : Object.assign({}, c, { id: Date.now() + i })));
 }
 
+function migrarFechas() {
+    if (localStorage.getItem(MIGRADO_KEY)) return;
+    const hoy = new Date().toISOString().slice(0, 10);
+    let cambio = false;
+    clientes.forEach(c => {
+        if (c.fechaEstimada !== "2026-08-25" || c.fechaRegistro !== hoy || c.fechaEstado !== hoy) {
+            c.fechaEstimada = "2026-08-25";
+            c.fechaRegistro = hoy;
+            c.fechaEstado = hoy;
+            cambio = true;
+        }
+    });
+    if (cambio) saveData();
+    localStorage.setItem(MIGRADO_KEY, "1");
+}
+
 function loadData() {
     fetch(API_URL, { cache: "no-store" })
         .then(res => {
@@ -72,15 +90,12 @@ function loadData() {
         })
         .then(data => {
             clientes = normalizarIds(Array.isArray(data.clientes) ? data.clientes : []);
+            const vacio = clientes.length === 0;
+            if (vacio) clientes = seedData();
+            migrarFechas();
+            if (vacio) saveData();
             notas = data.notas || "";
             usandoAPI = true;
-            if (clientes.length === 0) {
-                clientes = normalizarIds(seedData());
-                return saveData().then(() => {
-                    document.getElementById("crm-notas-texto").value = notas;
-                    renderAll();
-                });
-            }
             document.getElementById("crm-notas-texto").value = notas;
             renderAll();
         })
@@ -92,6 +107,7 @@ function loadData() {
             } catch (e) {
                 clientes = seedData();
             }
+            migrarFechas();
             notas = localStorage.getItem(NOTES_KEY) || "";
             document.getElementById("crm-notas-texto").value = notas;
             renderAll();
