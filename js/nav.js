@@ -2,7 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const links = [
         { href: "index.html", label: "Calendario" },
         { href: "diferencia-horaria.html", label: "Horarios" },
-        { href: "organigrama.html", label: "Organigrama" }
+        { href: "organigrama.html", label: "Organigrama" },
+        { href: "crm.html", label: "CRM" }
     ];
     const current = location.pathname.split("/").pop() || "index.html";
     const nav = document.getElementById("menu");

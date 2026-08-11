@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM - Clientes</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav id="menu" class="menu-superior"></nav>
+    <div class="container">
+        <header>
+            <h1>CRM - GESTIÓN DE CLIENTES</h1>
+            <div class="crm-acciones">
+                <button id="crm-nuevo" class="filtro-btn crm-btn-primary">+ NUEVO REGISTRO</button>
+                <button id="crm-export" class="filtro-btn">EXPORTAR CSV</button>
+                <button id="crm-import-btn" class="filtro-btn">IMPORTAR CSV</button>
+                <input type="file" id="crm-import-file" accept=".csv" style="display:none">
+            </div>
+        </header>
+
+        <div id="crm-resumen" class="crm-resumen"></div>
+
+        <div class="crm-filtros">
+            <select id="filtro-region"><option value="">TODAS LAS REGIONES</option></select>
+            <select id="filtro-cliente"><option value="">TODOS LOS CLIENTES</option></select>
+            <select id="filtro-estado"><option value="">TODOS LOS ESTADOS</option></select>
+        </div>
+
+        <main class="calendario">
+            <div class="crm-tabla-wrap">
+                <table id="crm-tabla" class="crm-tabla">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Región</th>
+                            <th>Línea</th>
+                            <th>SKU</th>
+                            <th>Unidades</th>
+                            <th>Promo</th>
+                            <th>P. Cliente</th>
+                            <th>P. Intcomex</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Obs.</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="crm-tbody"></tbody>
+                </table>
+                <div id="crm-vacio" class="sin-feriados" style="display:none">No hay registros.</div>
+            </div>
+
+            <div class="crm-notas">
+                <h2>NOTAS Y PENDIENTES</h2>
+                <textarea id="crm-notas-texto" rows="6" placeholder="Notas, reuniones, pendientes, acciones..."></textarea>
+                <div class="crm-notas-pie">
+                    <span id="crm-notas-save-msg" class="nota"></span>
+                    <button id="crm-notas-save" class="filtro-btn">GUARDAR NOTAS</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="crm-modal" class="crm-modal" style="display:none">
+        <div class="crm-modal-box">
+            <h2 id="crm-modal-titulo">NUEVO REGISTRO</h2>
+            <form id="crm-form">
+                <div class="crm-form-grid">
+                    <label>Cliente (Canal)
+                        <input type="text" id="f-canal" required>
+                    </label>
+                    <label>Región
+                        <select id="f-region"></select>
+                    </label>
+                    <label>Línea
+                        <input type="text" id="f-linea">
+                    </label>
+                    <label>SKU
+                        <input type="text" id="f-sku">
+                    </label>
+                    <label>Unidades
+                        <input type="number" id="f-unidades" min="0" step="1" value="0">
+                    </label>
+                    <label>Promo (forecast)
+                        <input type="text" id="f-promo">
+                    </label>
+                    <label>SKU Promo
+                        <input type="text" id="f-skuPromo">
+                    </label>
+                    <label>Precio Cliente
+                        <input type="number" id="f-precioCliente" min="0" step="0.01" value="0">
+                    </label>
+                    <label>Precio Intcomex
+                        <input type="number" id="f-precioIntcomex" min="0" step="0.01" value="0">
+                    </label>
+                    <label>Fecha / Periodo
+                        <input type="text" id="f-fecha" placeholder="Agosto/Septiembre">
+                    </label>
+                    <label>Estado
+                        <select id="f-estado"></select>
+                    </label>
+                    <label>Total (automático)
+                        <input type="text" id="f-total" readonly>
+                    </label>
+                </div>
+                <label>Observaciones
+                    <textarea id="f-obs" rows="3"></textarea>
+                </label>
+                <div class="crm-modal-acciones">
+                    <button type="button" id="crm-cancelar" class="filtro-btn">CANCELAR</button>
+                    <button type="submit" class="filtro-btn crm-btn-primary">GUARDAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/crm.js"></script>
+    <script src="js/nav.js"></script>
+</body>
+</html>
