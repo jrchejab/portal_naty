@@ -36,18 +36,18 @@ let regionPorCanal = {};
 
 function seedData() {
     return [
-        { region: "Costa Rica", canal: "Intelec", linea: "MT1", sku: "SE000MCA02", unidades: 250, promo: "SKUPROMO", skuPromo: "PROMO2026Q311926", precioCliente: 5.54, precioIntcomex: 14.6, fecha: "Agosto/Septiembre", estado: "Facturado", observaciones: "" },
-        { region: "Salvador", canal: "almacenes Siman", linea: "MT1", sku: "SE000MCA02", unidades: 200, promo: "SKUPROMO", skuPromo: "PROMO2026Q311925", precioCliente: 7.3, precioIntcomex: 14.6, fecha: "Agosto/Septiembre", estado: "Facturado", observaciones: "" },
-        { region: "Salvador", canal: "Gmg", linea: "MT1", sku: "SE000MCA02", unidades: 10, promo: "SKUPROMO", skuPromo: "PROMO2026Q311925", precioCliente: 7.3, precioIntcomex: 14.6, fecha: "Agosto/Septiembre", estado: "Enviado a Facturar", observaciones: "" },
-        { region: "Salvador", canal: "Acer", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 7.3, precioIntcomex: 14.6, fecha: "Agosto/Septiembre", estado: "Pendiente confirmacion PM", observaciones: "" },
-        { region: "Salvador", canal: "Lenovo", linea: "MT1", sku: "SE000MCA02", unidades: 190, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fecha: "Agosto/Septiembre", estado: "Pendiente confirmacion PM", observaciones: "" },
-        { region: "Salvador", canal: "HP", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fecha: "Agosto/Septiembre", estado: "Pendiente SKU promo y Carta", observaciones: "" },
-        { region: "Regional", canal: "Intcomex", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 7.3, precioIntcomex: 14.6, fecha: "Agosto/Septiembre", estado: "Pendiente lanzamiento", observaciones: "" },
-        { region: "US", canal: "Intcomex", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fecha: "Agosto/Septiembre", estado: "Pendiente lanzamiento", observaciones: "" },
-        { region: "Salvador", canal: "Lenovo", linea: "MT1", sku: "SE000MCA02", unidades: 1000, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fecha: "Agosto/Septiembre", estado: "En Negociacion", observaciones: "" },
-        { region: "Venezuela", canal: "X5server", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 14.6, precioIntcomex: 14.6, fecha: "Agosto/Septiembre", estado: "Cotizacion", observaciones: "" },
-        { region: "Chile", canal: "Paris", linea: "MT1", sku: "SE000MCA02", unidades: 50, promo: "", skuPromo: "", precioCliente: 14.6, precioIntcomex: 14.6, fecha: "Agosto/Septiembre", estado: "Cotizacion", observaciones: "" },
-        { region: "Peru", canal: "connecta", linea: "MT1", sku: "SE000MCA02", unidades: 2000, promo: "", skuPromo: "", precioCliente: 14.6, precioIntcomex: 14.6, fecha: "", estado: "Cotizacion", observaciones: "" }
+        { region: "Costa Rica", canal: "Intelec", linea: "MT1", sku: "SE000MCA02", unidades: 250, promo: "SKUPROMO", skuPromo: "PROMO2026Q311926", precioCliente: 5.54, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-01", estado: "Facturado", observaciones: "" },
+        { region: "Salvador", canal: "almacenes Siman", linea: "MT1", sku: "SE000MCA02", unidades: 200, promo: "SKUPROMO", skuPromo: "PROMO2026Q311925", precioCliente: 7.3, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-01", estado: "Facturado", observaciones: "" },
+        { region: "Salvador", canal: "Gmg", linea: "MT1", sku: "SE000MCA02", unidades: 10, promo: "SKUPROMO", skuPromo: "PROMO2026Q311925", precioCliente: 7.3, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-02", estado: "Enviado a Facturar", observaciones: "" },
+        { region: "Salvador", canal: "Acer", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 7.3, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-02", estado: "Pendiente confirmacion PM", observaciones: "" },
+        { region: "Salvador", canal: "Lenovo", linea: "MT1", sku: "SE000MCA02", unidades: 190, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-03", estado: "Pendiente confirmacion PM", observaciones: "" },
+        { region: "Salvador", canal: "HP", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-03", estado: "Pendiente SKU promo y Carta", observaciones: "" },
+        { region: "Regional", canal: "Intcomex", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 7.3, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-04", estado: "Pendiente lanzamiento", observaciones: "" },
+        { region: "US", canal: "Intcomex", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-04", estado: "Pendiente lanzamiento", observaciones: "" },
+        { region: "Salvador", canal: "Lenovo", linea: "MT1", sku: "SE000MCA02", unidades: 1000, promo: "", skuPromo: "", precioCliente: 5.1, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-04", estado: "En Negociacion", observaciones: "" },
+        { region: "Venezuela", canal: "X5server", linea: "MT1", sku: "SE000MCA02", unidades: 100, promo: "", skuPromo: "", precioCliente: 14.6, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-01", estado: "Cotizacion", observaciones: "" },
+        { region: "Chile", canal: "Paris", linea: "MT1", sku: "SE000MCA02", unidades: 50, promo: "", skuPromo: "", precioCliente: 14.6, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-02", estado: "Cotizacion", observaciones: "" },
+        { region: "Peru", canal: "connecta", linea: "MT1", sku: "SE000MCA02", unidades: 2000, promo: "", skuPromo: "", precioCliente: 14.6, precioIntcomex: 14.6, fechaEstimada: "2026-08-25", fechaRegistro: "2026-07-15", fechaEstado: "2026-08-03", estado: "Cotizacion", observaciones: "" }
     ];
 }
 
@@ -165,11 +165,28 @@ function filtrados() {
     const r = document.getElementById("filtro-region").value;
     const c = document.getElementById("filtro-cliente").value;
     const e = document.getElementById("filtro-estado").value;
+    const feD = document.getElementById("filtro-fe-desde").value;
+    const feH = document.getElementById("filtro-fe-hasta").value;
+    const frD = document.getElementById("filtro-fr-desde").value;
+    const frH = document.getElementById("filtro-fr-hasta").value;
+    const fsD = document.getElementById("filtro-fs-desde").value;
+    const fsH = document.getElementById("filtro-fs-hasta").value;
+    const entre = (v, d, h) => (v ? ((!d || v >= d) && (!h || v <= h)) : (!d && !h));
     return clientes.filter(x =>
         (!r || x.region === r) &&
         (!c || x.canal === c) &&
-        (!e || x.estado === e)
+        (!e || x.estado === e) &&
+        entre(x.fechaEstimada, feD, feH) &&
+        entre(x.fechaRegistro, frD, frH) &&
+        entre(x.fechaEstado, fsD, fsH)
     );
+}
+
+function fmtFecha(iso) {
+    if (!iso) return "";
+    const p = String(iso).split("-");
+    if (p.length !== 3) return iso;
+    return `${p[0]}/${p[1]}/${p[2]}`;
 }
 
 function renderTabla() {
@@ -187,9 +204,11 @@ function renderTabla() {
             <td>${esc(c.promo)}</td>
             <td class="crm-num">$${fmt(c.precioCliente)}</td>
             <td class="crm-num">$${fmt(c.precioIntcomex)}</td>
-            <td>${esc(c.fecha)}</td>
+            <td class="crm-num">${fmtFecha(c.fechaEstimada)}</td>
             <td class="crm-num"><strong>$${fmt(totalRegistro(c))}</strong></td>
             <td><span class="crm-estado" style="background:${color}">${esc(c.estado)}</span></td>
+            <td class="crm-num">${fmtFecha(c.fechaRegistro)}</td>
+            <td class="crm-num">${fmtFecha(c.fechaEstado)}</td>
             <td class="crm-obs" title="${esc(c.observaciones)}">${esc(c.observaciones)}</td>
             <td class="crm-acciones">
                 <button class="filtro-btn crm-edit" data-id="${c.id}">Editar</button>
@@ -247,7 +266,10 @@ function abrirModal(registro) {
     document.getElementById("f-skuPromo").value = registro ? (registro.skuPromo || "") : "";
     document.getElementById("f-precioCliente").value = registro ? registro.precioCliente : 0;
     document.getElementById("f-precioIntcomex").value = registro ? registro.precioIntcomex : 0;
-    document.getElementById("f-fecha").value = registro ? (registro.fecha || "") : "";
+    document.getElementById("f-fecha").value = registro ? (registro.fechaEstimada || "") : "";
+    const hoy = new Date().toISOString().slice(0, 10);
+    document.getElementById("f-fechaRegistro").value = registro ? (registro.fechaRegistro || hoy) : hoy;
+    document.getElementById("f-fechaEstado").value = registro ? (registro.fechaEstado || hoy) : hoy;
     document.getElementById("f-estado").value = registro ? registro.estado : "Cotizacion";
     document.getElementById("f-obs").value = registro ? (registro.observaciones || "") : "";
     actualizarTotalForm();
@@ -267,9 +289,15 @@ function actualizarTotalForm() {
 
 function guardarForm(e) {
     e.preventDefault();
+    const estado = document.getElementById("f-estado").value;
+    const hoy = new Date().toISOString().slice(0, 10);
+    let anterior = null;
+    if (editandoId) {
+        anterior = clientes.find(c => c.id === editandoId);
+    }
     const rec = {
         canal: document.getElementById("f-canal").value.trim(),
-        region: document.getElementById("f-region").value,
+        region: document.getElementById("f-region").value.trim(),
         linea: document.getElementById("f-linea").value.trim(),
         sku: document.getElementById("f-sku").value.trim(),
         unidades: Number(document.getElementById("f-unidades").value) || 0,
@@ -277,16 +305,19 @@ function guardarForm(e) {
         skuPromo: document.getElementById("f-skuPromo").value.trim(),
         precioCliente: Number(document.getElementById("f-precioCliente").value) || 0,
         precioIntcomex: Number(document.getElementById("f-precioIntcomex").value) || 0,
-        fecha: document.getElementById("f-fecha").value.trim(),
-        estado: document.getElementById("f-estado").value,
+        fechaEstimada: document.getElementById("f-fecha").value,
+        estado: estado,
         observaciones: document.getElementById("f-obs").value.trim()
     };
     if (!rec.canal) return;
-    if (editandoId) {
-        const idx = clientes.findIndex(c => c.id === editandoId);
-        if (idx >= 0) clientes[idx] = Object.assign({}, clientes[idx], rec);
+    if (anterior) {
+        rec.fechaRegistro = anterior.fechaRegistro || hoy;
+        rec.fechaEstado = (anterior.estado !== estado) ? hoy : (anterior.fechaEstado || hoy);
+        Object.assign(anterior, rec);
     } else {
         rec.id = Date.now();
+        rec.fechaRegistro = hoy;
+        rec.fechaEstado = hoy;
         clientes.push(rec);
     }
     saveData();
@@ -295,10 +326,10 @@ function guardarForm(e) {
 }
 
 function exportarCSV() {
-    const hdr = ["Region", "Canal", "Linea", "SKU", "Unidades", "Promo", "skuPromo", "PrecioCliente", "PrecioIntcomex", "Fecha", "Total", "Estado", "Observaciones"];
+    const hdr = ["Region", "Canal", "Linea", "SKU", "Unidades", "Promo", "skuPromo", "PrecioCliente", "PrecioIntcomex", "FechaEstimada", "Total", "Estado", "FechaRegistro", "FechaEstado", "Observaciones"];
     const lines = [hdr.join(",")];
     clientes.forEach(c => {
-        const vals = [c.region, c.canal, c.linea, c.sku, c.unidades, c.promo, c.skuPromo, c.precioCliente, c.precioIntcomex, c.fecha, totalRegistro(c), c.estado, c.observaciones];
+        const vals = [c.region, c.canal, c.linea, c.sku, c.unidades, c.promo, c.skuPromo, c.precioCliente, c.precioIntcomex, c.fechaEstimada, totalRegistro(c), c.estado, c.fechaRegistro, c.fechaEstado, c.observaciones];
         lines.push(vals.map(v => {
             v = (v === null || v === undefined) ? "" : String(v);
             return /[",;\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
@@ -353,8 +384,10 @@ function importarCSV(file) {
                 skuPromo: g("skupromo"),
                 precioCliente: num("preciocliente"),
                 precioIntcomex: num("preciointcomex"),
-                fecha: g("fecha"),
+                fechaEstimada: g("fechaestimada") || g("fecha"),
                 estado: g("estado"),
+                fechaRegistro: g("fecharegistro"),
+                fechaEstado: g("fechaestado"),
                 observaciones: g("observaciones")
             };
         }).filter(c => c.canal);
@@ -385,6 +418,9 @@ function setup() {
     document.getElementById("filtro-region").addEventListener("change", renderTabla);
     document.getElementById("filtro-cliente").addEventListener("change", renderTabla);
     document.getElementById("filtro-estado").addEventListener("change", renderTabla);
+    ["filtro-fe-desde", "filtro-fe-hasta", "filtro-fr-desde", "filtro-fr-hasta", "filtro-fs-desde", "filtro-fs-hasta"].forEach(id => {
+        document.getElementById(id).addEventListener("change", renderTabla);
+    });
 
     const selEstado = document.getElementById("f-estado");
     selEstado.innerHTML = ESTADOS.map(e => `<option value="${e}">${e}</option>`).join("");

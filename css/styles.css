@@ -248,6 +248,43 @@ body {
     background: #fff;
 }
 
+.crm-filtros-fechas {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 8px 0;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 14px;
+}
+
+.crm-rango {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 0.75rem;
+}
+
+.crm-rango-nombre {
+    font-weight: 600;
+    color: #374151;
+    white-space: nowrap;
+}
+
+.crm-rango input[type="date"] {
+    padding: 5px 8px;
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    background: #fff;
+}
+
+.crm-rango-sep {
+    color: #9aa4b2;
+}
+
 .crm-tabla-wrap {
     overflow-x: auto;
     background: #fff;

@@ -26,6 +26,20 @@
             <select id="filtro-cliente"><option value="">TODOS LOS CLIENTES</option></select>
             <select id="filtro-estado"><option value="">TODOS LOS ESTADOS</option></select>
         </div>
+        <div class="crm-filtros-fechas">
+            <div class="crm-rango">
+                <span class="crm-rango-nombre">F. Est. Cierre</span>
+                <input type="date" id="filtro-fe-desde"><span class="crm-rango-sep">→</span><input type="date" id="filtro-fe-hasta">
+            </div>
+            <div class="crm-rango">
+                <span class="crm-rango-nombre">F. Registro</span>
+                <input type="date" id="filtro-fr-desde"><span class="crm-rango-sep">→</span><input type="date" id="filtro-fr-hasta">
+            </div>
+            <div class="crm-rango">
+                <span class="crm-rango-nombre">F. Últ. Estado</span>
+                <input type="date" id="filtro-fs-desde"><span class="crm-rango-sep">→</span><input type="date" id="filtro-fs-hasta">
+            </div>
+        </div>
 
         <main class="calendario">
             <div class="crm-tabla-wrap">
@@ -40,9 +54,11 @@
                             <th>Promo</th>
                             <th>P. Cliente</th>
                             <th>P. Intcomex</th>
-                            <th>Fecha</th>
+                            <th>F. Est. Cierre</th>
                             <th>Total</th>
                             <th>Estado</th>
+                            <th>F. Registro</th>
+                            <th>F. Últ. Estado</th>
                             <th>Obs.</th>
                             <th></th>
                         </tr>
@@ -99,14 +115,20 @@
                     <label>Precio Intcomex
                         <input type="number" id="f-precioIntcomex" min="0" step="0.01" value="0">
                     </label>
-                    <label>Fecha / Periodo
-                        <input type="text" id="f-fecha" placeholder="Agosto/Septiembre">
+                    <label>Fecha Estimada Cierre
+                        <input type="date" id="f-fecha">
                     </label>
                     <label>Estado
                         <select id="f-estado"></select>
                     </label>
                     <label>Total (automático)
                         <input type="text" id="f-total" readonly>
+                    </label>
+                    <label>Fecha de Registro (automático)
+                        <input type="text" id="f-fechaRegistro" readonly>
+                    </label>
+                    <label>Fecha de Último Estado (automático)
+                        <input type="text" id="f-fechaEstado" readonly>
                     </label>
                 </div>
                 <label>Observaciones
