@@ -8,6 +8,12 @@ let currentStart = 0;
 let activeFilter = "ALL";
 let currentView = "MES";
 
+const CAL_API_URL = "api.php?tipo=calendario";
+const CAL_NOTAS_KEY = "cal_notas_v1";
+let notasCal = {};
+let panelDate = null;
+let notasCalLocal = false;
+
 function getCountry(code) {
     return countries.find(c => c.code === code);
 }
@@ -113,42 +119,20 @@ function renderMonthEl(container, year, month) {
                 dot.title = `${c.name}: ${h.name}`;
                 indicators.appendChild(dot);
             });
-
-            const tip = document.createElement("div");
-            tip.className = "tooltip";
-            const fechaLabel = `${dayNum} DE ${MONTHS[month - MONTH_OFFSET].toUpperCase()} DE ${year}`;
-            tip.innerHTML = `<div class="tooltip-fecha">${fechaLabel}</div>`;
-
-            const seen2 = new Set();
-            hList.forEach(h => {
-                if (seen2.has(h.country)) return;
-                seen2.add(h.country);
-                const c = getCountry(h.country);
-                if (!c) return;
-                const item = document.createElement("div");
-                item.className = "tooltip-feriado";
-                item.innerHTML = `
-                    <span class="tooltip-dot" style="background:${c.color}"></span>
-                    <div class="tooltip-info">
-                        <div class="tooltip-pais">${c.name}</div>
-                        <div class="tooltip-nombre">${h.name}</div>
-                        <div class="tooltip-tipo">${h.type}</div>
-                    </div>
-                `;
-                tip.appendChild(item);
-            });
-
-            div.appendChild(indicators);
-            div.appendChild(tip);
-
-            div.addEventListener("click", (e) => {
-                e.stopPropagation();
-                closeAllTooltips();
-                tip.classList.toggle("show");
-            });
-        } else {
-            div.appendChild(indicators);
         }
+        div.appendChild(indicators);
+
+        if (notasCal[dateStr]) {
+            const nd = document.createElement("span");
+            nd.className = "nota-indicador";
+            nd.title = "Tiene nota";
+            div.appendChild(nd);
+        }
+
+        div.addEventListener("click", (e) => {
+            e.stopPropagation();
+            abrirPanelNota(dateStr);
+        });
 
         grid.appendChild(div);
     });
@@ -401,7 +385,108 @@ document.addEventListener("click", (e) => {
     if (!e.target.closest(".dia")) {
         closeAllTooltips();
     }
+    if (!e.target.closest(".nota-panel") && !e.target.closest(".dia")) {
+        cerrarPanelNota();
+    }
 });
+
+function cargarNotasCal() {
+    fetch(CAL_API_URL, { cache: "no-store" })
+        .then(res => {
+            if (!res.ok) throw new Error("api");
+            return res.json();
+        })
+        .then(data => {
+            notasCal = (data && typeof data === "object" && !Array.isArray(data)) ? data : {};
+            notasCalLocal = false;
+            renderCurrent();
+        })
+        .catch(() => {
+            notasCalLocal = true;
+            try {
+                notasCal = JSON.parse(localStorage.getItem(CAL_NOTAS_KEY)) || {};
+            } catch (e) {
+                notasCal = {};
+            }
+            renderCurrent();
+        });
+}
+
+function guardarNotasCal() {
+    if (notasCalLocal) {
+        localStorage.setItem(CAL_NOTAS_KEY, JSON.stringify(notasCal));
+        return;
+    }
+    fetch(CAL_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(notasCal)
+    }).catch(() => {
+        notasCalLocal = true;
+        localStorage.setItem(CAL_NOTAS_KEY, JSON.stringify(notasCal));
+    });
+}
+
+function abrirPanelNota(dateStr) {
+    panelDate = dateStr;
+    const fecha = new Date(dateStr + "T12:00:00");
+    const label = fecha.toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
+    document.getElementById("nota-fecha").textContent = label.toUpperCase();
+    document.getElementById("nota-texto").value = notasCal[dateStr] || "";
+
+    const hList = holidaysForDate(dateStr);
+    const feriadosEl = document.getElementById("nota-feriados");
+    if (hList.length > 0) {
+        feriadosEl.innerHTML = hList.map(h => {
+            const c = getCountry(h.country);
+            return `<div class="nota-feriado">
+                <span class="nota-dot" style="background:${c ? c.color : "#94a3b8"}"></span>
+                <div>
+                    <div class="nota-feriado-pais">${c ? c.name : h.country}</div>
+                    <div class="nota-feriado-nombre">${h.name} · ${h.type}</div>
+                </div>
+            </div>`;
+        }).join("");
+        feriadosEl.style.display = "block";
+    } else {
+        feriadosEl.innerHTML = '<div class="nota-feriado nota-sin">No hay feriados registrados.</div>';
+        feriadosEl.style.display = "block";
+    }
+
+    document.getElementById("nota-msg").textContent = "";
+    document.getElementById("nota-panel").style.display = "flex";
+}
+
+function cerrarPanelNota() {
+    document.getElementById("nota-panel").style.display = "none";
+    panelDate = null;
+}
+
+function guardarNotaActual() {
+    if (!panelDate) return;
+    const txt = document.getElementById("nota-texto").value.trim();
+    if (txt) {
+        notasCal[panelDate] = txt;
+    } else {
+        delete notasCal[panelDate];
+    }
+    guardarNotasCal();
+    renderCurrent();
+    const msg = document.getElementById("nota-msg");
+    msg.textContent = "Nota guardada.";
+    setTimeout(() => { msg.textContent = ""; }, 2000);
+}
+
+function borrarNotaActual() {
+    if (!panelDate) return;
+    delete notasCal[panelDate];
+    document.getElementById("nota-texto").value = "";
+    guardarNotasCal();
+    renderCurrent();
+    const msg = document.getElementById("nota-msg");
+    msg.textContent = "Nota eliminada.";
+    setTimeout(() => { msg.textContent = ""; }, 2000);
+}
 
 function setupViewToggle() {
     const views = ["MES", "BIMESTRE", "SEMESTRE"];
@@ -431,5 +516,14 @@ document.addEventListener("DOMContentLoaded", () => {
     setupFilters();
     setupNavigation();
     setupViewToggle();
+
+    document.getElementById("nota-guardar").addEventListener("click", guardarNotaActual);
+    document.getElementById("nota-borrar").addEventListener("click", borrarNotaActual);
+    document.getElementById("nota-cerrar").addEventListener("click", cerrarPanelNota);
+    document.getElementById("nota-panel").addEventListener("click", (e) => {
+        if (e.target.id === "nota-panel") cerrarPanelNota();
+    });
+
     renderCurrent();
+    cargarNotasCal();
 });

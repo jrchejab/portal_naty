@@ -2,28 +2,33 @@
 header('Content-Type: application/json; charset=utf-8');
 
 $dataDir = __DIR__ . '/data';
-$file = $dataDir . '/clientes.json';
+$tipo = isset($_GET['tipo']) ? $_GET['tipo'] : 'clientes';
+
+if ($tipo === 'calendario') {
+    $file = $dataDir . '/calendario_notas.json';
+} else {
+    $file = $dataDir . '/clientes.json';
+}
 
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
     if (!file_exists($file)) {
-        echo json_encode(['clientes' => [], 'notas' => '']);
+        if ($tipo === 'calendario') {
+            echo json_encode(new stdClass());
+        } else {
+            echo json_encode(['clientes' => [], 'notas' => '']);
+        }
         exit;
     }
-    $raw = file_get_contents($file);
-    $data = json_decode($raw, true);
-    if (!is_array($data) || !array_key_exists('clientes', $data)) {
-        $data = ['clientes' => [], 'notas' => ''];
-    }
-    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    echo file_get_contents($file);
     exit;
 }
 
 if ($method === 'POST') {
     $input = file_get_contents('php://input');
     $parsed = json_decode($input, true);
-    if (!is_array($parsed) || !array_key_exists('clientes', $parsed)) {
+    if (!is_array($parsed) && !is_object($parsed)) {
         http_response_code(400);
         echo json_encode(['error' => 'payload invalido']);
         exit;

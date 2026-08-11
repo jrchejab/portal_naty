@@ -922,6 +922,116 @@ header h1 {
     font-weight: 700;
 }
 
+.nota-indicador {
+    position: absolute;
+    right: 5px;
+    bottom: 4px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #f59e0b;
+}
+
+.nota-panel {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 16px;
+}
+
+.nota-panel-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 18px 22px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+.nota-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.nota-fecha {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.nota-feriados {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+}
+
+.nota-feriado {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.nota-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+.nota-feriado-pais {
+    font-weight: 600;
+    font-size: 0.82rem;
+}
+
+.nota-feriado-nombre {
+    font-size: 0.78rem;
+    color: #374151;
+}
+
+.nota-sin {
+    color: #8b95a5;
+    font-size: 0.82rem;
+}
+
+.nota-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #374151;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.nota-panel-box textarea {
+    width: 100%;
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    resize: vertical;
+}
+
+.nota-panel-acciones {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.nota-panel-acciones .nota {
+    margin-right: auto;
+}
+
 .tooltip {
     display: none;
     position: absolute;
