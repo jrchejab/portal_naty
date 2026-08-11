@@ -8,7 +8,7 @@
 </head>
 <body>
     <nav id="menu" class="menu-superior"></nav>
-    <div class="container">
+    <div class="container-full">
         <header>
             <h1>CRM - GESTIÓN DE CLIENTES</h1>
             <div class="crm-acciones">
@@ -73,7 +73,8 @@
                         <datalist id="lista-canales"></datalist>
                     </label>
                     <label>Región
-                        <select id="f-region"></select>
+                        <input type="text" id="f-region" list="lista-regiones">
+                        <datalist id="lista-regiones"></datalist>
                     </label>
                     <label>Línea
                         <input type="text" id="f-linea" list="lista-lineas">

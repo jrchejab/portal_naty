@@ -226,6 +226,10 @@ function abrirModal(registro) {
     document.getElementById("lista-skus").innerHTML =
         skus.map(x => `<option value="${esc(x)}"></option>`).join("");
 
+    const todasRegiones = [...new Set([...REGIONES, ...clientes.map(c => c.region).filter(Boolean)])];
+    document.getElementById("lista-regiones").innerHTML =
+        todasRegiones.map(r => `<option value="${esc(r)}"></option>`).join("");
+
     regionPorCanal = {};
     clientes.forEach(c => {
         if (c.canal && c.region) {
@@ -382,20 +386,31 @@ function setup() {
     document.getElementById("filtro-cliente").addEventListener("change", renderTabla);
     document.getElementById("filtro-estado").addEventListener("change", renderTabla);
 
-    const selRegion = document.getElementById("f-region");
-    selRegion.innerHTML = REGIONES.map(r => `<option value="${r}">${r}</option>`).join("");
     const selEstado = document.getElementById("f-estado");
     selEstado.innerHTML = ESTADOS.map(e => `<option value="${e}">${e}</option>`).join("");
+
+    const todasRegiones = [...new Set([...REGIONES, ...clientes.map(c => c.region).filter(Boolean)])];
+    document.getElementById("lista-regiones").innerHTML =
+        todasRegiones.map(r => `<option value="${esc(r)}"></option>`).join("");
 
     document.getElementById("f-unidades").addEventListener("input", actualizarTotalForm);
     document.getElementById("f-precioCliente").addEventListener("input", actualizarTotalForm);
 
-    document.getElementById("f-canal").addEventListener("input", function () {
-        const r = regionPorCanal[this.value.trim()];
-        if (r) {
-            document.getElementById("f-region").value = r;
+    function llenarPorCanal() {
+        const v = document.getElementById("f-canal").value.trim();
+        if (!v) return;
+        const directo = regionPorCanal[v];
+        if (directo) {
+            document.getElementById("f-region").value = directo;
+            return;
         }
-    });
+        const hits = Object.keys(regionPorCanal).filter(k => k.toLowerCase() === v.toLowerCase());
+        if (hits.length === 1) {
+            document.getElementById("f-region").value = regionPorCanal[hits[0]];
+        }
+    }
+    document.getElementById("f-canal").addEventListener("input", llenarPorCanal);
+    document.getElementById("f-canal").addEventListener("change", llenarPorCanal);
 
     document.getElementById("crm-nuevo").addEventListener("click", () => abrirModal(null));
     document.getElementById("crm-cancelar").addEventListener("click", cerrarModal);
