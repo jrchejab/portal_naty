@@ -25,19 +25,25 @@
             <select id="filtro-region"><option value="">TODAS LAS REGIONES</option></select>
             <select id="filtro-cliente"><option value="">TODOS LOS CLIENTES</option></select>
             <select id="filtro-estado"><option value="">TODOS LOS ESTADOS</option></select>
-        </div>
-        <div class="crm-filtros-fechas">
-            <div class="crm-rango">
-                <span class="crm-rango-nombre">F. Est. Cierre</span>
-                <input type="date" id="filtro-fe-desde"><span class="crm-rango-sep">→</span><input type="date" id="filtro-fe-hasta">
-            </div>
-            <div class="crm-rango">
-                <span class="crm-rango-nombre">F. Registro</span>
-                <input type="date" id="filtro-fr-desde"><span class="crm-rango-sep">→</span><input type="date" id="filtro-fr-hasta">
-            </div>
-            <div class="crm-rango">
-                <span class="crm-rango-nombre">F. Últ. Estado</span>
-                <input type="date" id="filtro-fs-desde"><span class="crm-rango-sep">→</span><input type="date" id="filtro-fs-hasta">
+            <div class="crm-fechas-wrap">
+                <button id="crm-fechas-btn" class="filtro-btn">FECHAS <span id="crm-fechas-badge" class="crm-fechas-badge" style="display:none"></span></button>
+                <div id="crm-fechas-popup" class="crm-fechas-popup" style="display:none">
+                    <div class="crm-rango">
+                        <span class="crm-rango-nombre">F. Est. Cierre</span>
+                        <input type="date" id="filtro-fe-desde"><span class="crm-rango-sep">→</span><input type="date" id="filtro-fe-hasta">
+                    </div>
+                    <div class="crm-rango">
+                        <span class="crm-rango-nombre">F. Registro</span>
+                        <input type="date" id="filtro-fr-desde"><span class="crm-rango-sep">→</span><input type="date" id="filtro-fr-hasta">
+                    </div>
+                    <div class="crm-rango">
+                        <span class="crm-rango-nombre">F. Últ. Estado</span>
+                        <input type="date" id="filtro-fs-desde"><span class="crm-rango-sep">→</span><input type="date" id="filtro-fs-hasta">
+                    </div>
+                    <div class="crm-fechas-acciones">
+                        <button id="crm-fechas-limpiar" class="filtro-btn">LIMPIAR</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -54,13 +60,13 @@
                             <th>Promo</th>
                             <th>P. Cliente</th>
                             <th>P. Intcomex</th>
-                            <th>F. Est. Cierre</th>
                             <th>Total</th>
                             <th>Estado</th>
-                            <th>F. Registro</th>
-                            <th>F. Últ. Estado</th>
                             <th>Obs.</th>
                             <th></th>
+                            <th>F. Est. Cierre</th>
+                            <th>F. Registro</th>
+                            <th>F. Últ. Estado</th>
                         </tr>
                     </thead>
                     <tbody id="crm-tbody"></tbody>

@@ -248,15 +248,41 @@ body {
     background: #fff;
 }
 
-.crm-filtros-fechas {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin: 8px 0;
+.crm-fechas-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.crm-fechas-badge {
+    background: #FF9800;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.62rem;
+    padding: 1px 5px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.crm-fechas-popup {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 40;
     background: #fff;
     border: 1px solid #e2e8f0;
     border-radius: 10px;
-    padding: 10px 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 320px;
+}
+
+.crm-fechas-acciones {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
 }
 
 .crm-rango {
@@ -271,6 +297,7 @@ body {
     font-weight: 600;
     color: #374151;
     white-space: nowrap;
+    min-width: 110px;
 }
 
 .crm-rango input[type="date"] {
@@ -341,11 +368,14 @@ body {
 }
 
 .crm-obs {
-    max-width: 160px;
+    max-width: 200px;
+    min-width: 120px;
+    padding: 7px 12px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     color: #6b7280;
+    line-height: 1.4;
 }
 
 .crm-acciones button {

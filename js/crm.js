@@ -60,6 +60,10 @@ function fmt(n) {
     return v.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 }
 
+function normalizarIds(arr) {
+    return arr.map((c, i) => (c && c.id ? c : Object.assign({}, c, { id: Date.now() + i })));
+}
+
 function loadData() {
     fetch(API_URL, { cache: "no-store" })
         .then(res => {
@@ -67,11 +71,11 @@ function loadData() {
             return res.json();
         })
         .then(data => {
-            clientes = Array.isArray(data.clientes) ? data.clientes : [];
+            clientes = normalizarIds(Array.isArray(data.clientes) ? data.clientes : []);
             notas = data.notas || "";
             usandoAPI = true;
             if (clientes.length === 0) {
-                clientes = seedData();
+                clientes = normalizarIds(seedData());
                 return saveData().then(() => {
                     document.getElementById("crm-notas-texto").value = notas;
                     renderAll();
@@ -84,7 +88,7 @@ function loadData() {
             usandoAPI = false;
             const raw = localStorage.getItem(STORAGE_KEY);
             try {
-                clientes = raw ? JSON.parse(raw) : seedData();
+                clientes = normalizarIds(raw ? JSON.parse(raw) : seedData());
             } catch (e) {
                 clientes = seedData();
             }
@@ -204,16 +208,16 @@ function renderTabla() {
             <td>${esc(c.promo)}</td>
             <td class="crm-num">$${fmt(c.precioCliente)}</td>
             <td class="crm-num">$${fmt(c.precioIntcomex)}</td>
-            <td class="crm-num">${fmtFecha(c.fechaEstimada)}</td>
             <td class="crm-num"><strong>$${fmt(totalRegistro(c))}</strong></td>
             <td><span class="crm-estado" style="background:${color}">${esc(c.estado)}</span></td>
-            <td class="crm-num">${fmtFecha(c.fechaRegistro)}</td>
-            <td class="crm-num">${fmtFecha(c.fechaEstado)}</td>
             <td class="crm-obs" title="${esc(c.observaciones)}">${esc(c.observaciones)}</td>
             <td class="crm-acciones">
                 <button class="filtro-btn crm-edit" data-id="${c.id}">Editar</button>
                 <button class="filtro-btn crm-del" data-id="${c.id}">Eliminar</button>
             </td>
+            <td class="crm-num">${fmtFecha(c.fechaEstimada)}</td>
+            <td class="crm-num">${fmtFecha(c.fechaRegistro)}</td>
+            <td class="crm-num">${fmtFecha(c.fechaEstado)}</td>
         </tr>`;
     }).join("");
     vacio.style.display = rows.length ? "none" : "block";
@@ -222,6 +226,18 @@ function renderTabla() {
 function esc(s) {
     if (s === null || s === undefined) return "";
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function actualizarBadgeFechas() {
+    const ids = ["filtro-fe-desde", "filtro-fe-hasta", "filtro-fr-desde", "filtro-fr-hasta", "filtro-fs-desde", "filtro-fs-hasta"];
+    const activos = ids.filter(id => document.getElementById(id).value).length;
+    const badge = document.getElementById("crm-fechas-badge");
+    if (activos > 0) {
+        badge.textContent = activos;
+        badge.style.display = "inline-block";
+    } else {
+        badge.style.display = "none";
+    }
 }
 
 function renderAll() {
@@ -419,7 +435,31 @@ function setup() {
     document.getElementById("filtro-cliente").addEventListener("change", renderTabla);
     document.getElementById("filtro-estado").addEventListener("change", renderTabla);
     ["filtro-fe-desde", "filtro-fe-hasta", "filtro-fr-desde", "filtro-fr-hasta", "filtro-fs-desde", "filtro-fs-hasta"].forEach(id => {
-        document.getElementById(id).addEventListener("change", renderTabla);
+        document.getElementById(id).addEventListener("change", () => {
+            renderTabla();
+            actualizarBadgeFechas();
+        });
+    });
+
+    const fechasBtn = document.getElementById("crm-fechas-btn");
+    const fechasPopup = document.getElementById("crm-fechas-popup");
+    fechasBtn.addEventListener("click", ev => {
+        ev.stopPropagation();
+        const vis = fechasPopup.style.display === "block";
+        fechasPopup.style.display = vis ? "none" : "block";
+        if (!vis) actualizarBadgeFechas();
+    });
+    document.getElementById("crm-fechas-limpiar").addEventListener("click", () => {
+        ["filtro-fe-desde", "filtro-fe-hasta", "filtro-fr-desde", "filtro-fr-hasta", "filtro-fs-desde", "filtro-fs-hasta"].forEach(id => {
+            document.getElementById(id).value = "";
+        });
+        renderTabla();
+        actualizarBadgeFechas();
+    });
+    document.addEventListener("click", ev => {
+        if (!ev.target.closest(".crm-fechas-wrap")) {
+            fechasPopup.style.display = "none";
+        }
     });
 
     const selEstado = document.getElementById("f-estado");
