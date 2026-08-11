@@ -32,6 +32,7 @@ let clientes = [];
 let notas = "";
 let editandoId = null;
 let usandoAPI = true;
+let regionPorCanal = {};
 
 function seedData() {
     return [
@@ -213,9 +214,24 @@ function renderAll() {
 function abrirModal(registro) {
     editandoId = registro ? registro.id : null;
 
-    const dl = document.getElementById("lista-canales");
     const canales = [...new Set(clientes.map(c => (c.canal || "").trim()).filter(Boolean))].sort();
-    dl.innerHTML = canales.map(x => `<option value="${esc(x)}"></option>`).join("");
+    document.getElementById("lista-canales").innerHTML =
+        canales.map(x => `<option value="${esc(x)}"></option>`).join("");
+
+    const lineas = [...new Set(clientes.map(c => (c.linea || "").trim()).filter(Boolean))].sort();
+    document.getElementById("lista-lineas").innerHTML =
+        lineas.map(x => `<option value="${esc(x)}"></option>`).join("");
+
+    const skus = [...new Set(clientes.map(c => (c.sku || "").trim()).filter(Boolean))].sort();
+    document.getElementById("lista-skus").innerHTML =
+        skus.map(x => `<option value="${esc(x)}"></option>`).join("");
+
+    regionPorCanal = {};
+    clientes.forEach(c => {
+        if (c.canal && c.region) {
+            regionPorCanal[c.canal.trim()] = c.region;
+        }
+    });
 
     document.getElementById("crm-modal-titulo").textContent = registro ? "EDITAR REGISTRO" : "NUEVO REGISTRO";
     document.getElementById("f-canal").value = registro ? registro.canal : "";
@@ -373,6 +389,13 @@ function setup() {
 
     document.getElementById("f-unidades").addEventListener("input", actualizarTotalForm);
     document.getElementById("f-precioCliente").addEventListener("input", actualizarTotalForm);
+
+    document.getElementById("f-canal").addEventListener("input", function () {
+        const r = regionPorCanal[this.value.trim()];
+        if (r) {
+            document.getElementById("f-region").value = r;
+        }
+    });
 
     document.getElementById("crm-nuevo").addEventListener("click", () => abrirModal(null));
     document.getElementById("crm-cancelar").addEventListener("click", cerrarModal);
