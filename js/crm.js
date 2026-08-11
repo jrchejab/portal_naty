@@ -26,10 +26,12 @@ const REGIONES = [
 
 const STORAGE_KEY = "crm_clientes_v1";
 const NOTES_KEY = "crm_notas_v1";
+const API_URL = "api.php";
 
 let clientes = [];
 let notas = "";
 let editandoId = null;
+let usandoAPI = true;
 
 function seedData() {
     return [
@@ -58,23 +60,53 @@ function fmt(n) {
 }
 
 function loadData() {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-        try {
-            clientes = JSON.parse(raw);
-        } catch (e) {
-            clientes = seedData();
-        }
-    } else {
-        clientes = seedData();
-        saveData();
-    }
-    notas = localStorage.getItem(NOTES_KEY) || "";
-    document.getElementById("crm-notas-texto").value = notas;
+    fetch(API_URL, { cache: "no-store" })
+        .then(res => {
+            if (!res.ok) throw new Error("api");
+            return res.json();
+        })
+        .then(data => {
+            clientes = Array.isArray(data.clientes) ? data.clientes : [];
+            notas = data.notas || "";
+            usandoAPI = true;
+            if (clientes.length === 0) {
+                clientes = seedData();
+                return saveData().then(() => {
+                    document.getElementById("crm-notas-texto").value = notas;
+                    renderAll();
+                });
+            }
+            document.getElementById("crm-notas-texto").value = notas;
+            renderAll();
+        })
+        .catch(() => {
+            usandoAPI = false;
+            const raw = localStorage.getItem(STORAGE_KEY);
+            try {
+                clientes = raw ? JSON.parse(raw) : seedData();
+            } catch (e) {
+                clientes = seedData();
+            }
+            notas = localStorage.getItem(NOTES_KEY) || "";
+            document.getElementById("crm-notas-texto").value = notas;
+            renderAll();
+        });
 }
 
 function saveData() {
+    if (usandoAPI) {
+        return fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ clientes: clientes, notas: notas })
+        }).catch(() => {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(clientes));
+            localStorage.setItem(NOTES_KEY, notas);
+        });
+    }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(clientes));
+    localStorage.setItem(NOTES_KEY, notas);
+    return Promise.resolve();
 }
 
 function renderResumen() {
@@ -316,7 +348,7 @@ function importarCSV(file) {
 
 function guardarNotas() {
     notas = document.getElementById("crm-notas-texto").value;
-    localStorage.setItem(NOTES_KEY, notas);
+    saveData();
     const msg = document.getElementById("crm-notas-save-msg");
     msg.textContent = "Notas guardadas.";
     setTimeout(() => { msg.textContent = ""; }, 2000);
@@ -367,8 +399,6 @@ function setup() {
     document.getElementById("crm-modal").addEventListener("click", ev => {
         if (ev.target.id === "crm-modal") cerrarModal();
     });
-
-    renderAll();
 }
 
 document.addEventListener("DOMContentLoaded", setup);
