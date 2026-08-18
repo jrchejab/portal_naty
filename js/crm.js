@@ -153,20 +153,6 @@ function loadData() {
         });
 }
 
-function restaurarCopiaLocal() {
-    const local = copiaLocal();
-    if (!local) {
-        alert("No hay una copia local disponible en este navegador.");
-        return;
-    }
-    if (confirm(`Se encontró una copia local con ${local.length} registros. ¿Reemplazar la lista actual por esa copia y enviarla al servidor?`)) {
-        clientes = normalizarIds(local);
-        saveData();
-        renderAll();
-        alert("Copia local restaurada.");
-    }
-}
-
 function saveData() {
     if (usandoAPI) {
         return fetch(API_URL, {
@@ -653,7 +639,6 @@ function setup() {
         if (ev.target.files[0]) importarCSV(ev.target.files[0]);
         ev.target.value = "";
     });
-    document.getElementById("crm-restaurar").addEventListener("click", restaurarCopiaLocal);
 
     document.getElementById("crm-obs-cerrar").addEventListener("click", () => {
         document.getElementById("crm-obs-popup").style.display = "none";

@@ -233,13 +233,13 @@ body {
 
 .crm-filtros {
     display: flex;
+    align-items: center;
     gap: 8px;
     flex-wrap: wrap;
     margin: 10px 0;
 }
 
 .crm-filtros select {
-    flex: 1;
     min-width: 150px;
     padding: 7px 10px;
     border: 1px solid #d0d5dd;
