@@ -32,8 +32,6 @@ const REGIONES = [
 
 const STORAGE_KEY = "crm_clientes_v1";
 const NOTES_KEY = "crm_notas_v1";
-const MIGRADO_KEY = "crm_fechas_migrado_v1";
-const MIGRADO_ESTADOS_KEY = "crm_estados_migrado_v1";
 const API_URL = "api.php";
 
 let clientes = [];
@@ -77,23 +75,30 @@ function normalizarIds(arr) {
 }
 
 function migrarFechas() {
-    if (localStorage.getItem(MIGRADO_KEY)) return;
     const hoy = new Date().toISOString().slice(0, 10);
     let cambio = false;
     clientes.forEach(c => {
-        if (c.fechaEstimada !== "2026-08-25" || c.fechaRegistro !== hoy || c.fechaEstado !== hoy) {
-            c.fechaEstimada = "2026-08-25";
+        if (!c.fechaEstimada) {
+            c.fechaEstimada = (c.fecha && c.fecha !== "Agosto/Septiembre") ? c.fecha : "2026-08-25";
+            cambio = true;
+        }
+        if (!c.fechaRegistro) {
             c.fechaRegistro = hoy;
+            cambio = true;
+        }
+        if (!c.fechaEstado) {
             c.fechaEstado = hoy;
+            cambio = true;
+        }
+        if (c.fecha) {
+            delete c.fecha;
             cambio = true;
         }
     });
     if (cambio) saveData();
-    localStorage.setItem(MIGRADO_KEY, "1");
 }
 
 function migrarEstados() {
-    if (localStorage.getItem(MIGRADO_ESTADOS_KEY)) return;
     let cambio = false;
     clientes.forEach(c => {
         const nuevo = MAPA_ESTADOS[c.estado];
@@ -103,7 +108,6 @@ function migrarEstados() {
         }
     });
     if (cambio) saveData();
-    localStorage.setItem(MIGRADO_ESTADOS_KEY, "1");
 }
 
 function copiaLocal() {
