@@ -1,17 +1,26 @@
 Contexto
 
+> Nota: este es el prompt original de la herramienta de calendario. El estado actual del proyecto (11 países, notas por día, impresión, vistas Mes/Bimestre/Semestre, y las páginas Horarios, Organigrama y CRM) está documentado en `docs/contexto/portal-naty-estado.md`.
+
 Necesito desarrollar una herramienta web sencilla para visualizar en un único calendario los días feriados de varios países de Latinoamérica.
 
 La herramienta será utilizada principalmente como una herramienta de consulta empresarial, con el objetivo de identificar rápidamente si en una determinada fecha existe un feriado en alguno de los países seleccionados.
 
-Inicialmente los países serán:
+Los países son:
 
-🇵🇪 Perú
 🇨🇱 Chile
+🇨🇴 Colombia
+🇨🇷 Costa Rica
 🇪🇨 Ecuador
-🇺🇾 Uruguay
+🇸🇻 El Salvador
+🇬🇹 Guatemala
+🇭🇳 Honduras
+🇲🇽 México
+🇳🇮 Nicaragua
+🇵🇦 Panamá
+🇵🇪 Perú
 
-El alcance inicial será exclusivamente el segundo semestre de 2026, comprendido entre:
+El alcance es exclusivamente el segundo semestre de 2026, comprendido entre:
 
 1 de julio de 2026 y 31 de diciembre de 2026.
 
@@ -19,7 +28,7 @@ La herramienta debe ser visualmente sencilla, clara y rápida de utilizar.
 
 1. Objetivo principal
 
-Construir un Calendario Unificado de Feriados Internacionales que permita visualizar en una única interfaz los feriados correspondientes a los cuatro países.
+Construir un Calendario Unificado de Feriados Internacionales que permita visualizar en una única interfaz los feriados correspondientes a los once países.
 
 El usuario debe poder:
 

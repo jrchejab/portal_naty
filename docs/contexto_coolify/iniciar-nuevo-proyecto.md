@@ -31,7 +31,16 @@ git config --global credential.helper manager
 - En el panel de Coolify, crear nuevo proyecto
 - Conectar repositorio GitHub
 - Configurar rama de deploy (`main` o `develop`)
-- Coolify detecta `docker-compose.yml` o permite configurar servicios manualmente
+- **Build Pack** segun el tipo de app:
+  - **Static**: solo HTML/CSS/JS sin backend
+  - **Dockerfile**: cuando se necesita ejecutar codigo (ej: PHP con `Dockerfile` en la raiz) — es el que usa `portal_naty`
+  - Nixpacks/Docker Compose para apps con mas servicios
+
+## 2.1 Volumen persistente (si la app guarda datos)
+
+- En el recurso → **Persistent Storage** → **Volume Mount**
+- Destination Path: la carpeta que debe sobrevivir a los deploys (ej: `/var/www/html/data`)
+- Sin volumen, los datos de la carpeta se pierden en cada deploy (el contenedor se recrea)
 
 ## 3. Stack de servicios
 

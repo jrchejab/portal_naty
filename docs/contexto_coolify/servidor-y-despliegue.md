@@ -70,6 +70,12 @@ Se usa HTTPS con un Personal Access Token (PAT) almacenado en Windows Credential
 - Autenticacion: Windows Credential Manager via `credential.helper=manager`
 - El PAT tiene permisos para push a repositorios de la cuenta
 
+> **IMPORTANTE (credential manager)**: en la maquina DELL hay varias credenciales de GitHub guardadas (usuarios: `poordesigner`, `jrchejab`, `tachoatomico`, `x-access-token`). Al pushear, git puede usar la equivocada (ej: `poordesigner`) y dar `403 Permission denied`. Para forzar la cuenta correcta, el remote de este proyecto usa el usuario explicito:
+
+```powershell
+git remote set-url origin https://jrchejab@github.com/jrchejab/portal_naty.git
+```
+
 No hay SSH configurado para GitHub (ssh git@github.com da permission denied).
 
 ### Clonar un repositorio
@@ -86,6 +92,16 @@ No se requiere password — el credential manager resuelve la autenticacion.
 - `user.name=jrchejab`
 - `user.email=jrchejab@gmail.com`
 - `credential.helper=manager`
+
+## Proyecto portal_naty (este repo)
+
+Aplicacion web estatica + backend PHP para CRM/notas. Ver `docs/contexto/portal-naty-estado.md` para el estado completo.
+
+- **Build Pack en Coolify**: `Dockerfile` (imagen `php:8.2-apache`, Apache en el puerto 80). El Dockerfile esta en la raiz del repo.
+- **Volumen persistente**: `naty-crm-data` montado en `/var/www/html/data` (RW). Guarda `clientes.json` (CRM) y `calendario_notas.json` (notas del calendario).
+- **API**: `api.php` (GET/POST). `api.php` maneja los clientes; `api.php?tipo=calendario` las notas del calendario. Sin volumen, los datos se pierden en cada deploy.
+- **Rama**: `master` → produccion (deploy automatico al pushear).
+- **Nota**: si `api.php` muestra datos pero el volumen aparece vacio, verificar que el volumen este montado exactamente en `/var/www/html/data` (los archivos quedan en `/var/lib/docker/volumes/naty-crm-data/_data/`).
 
 ## Flujo de deploy con Coolify
 
