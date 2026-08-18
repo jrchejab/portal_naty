@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRM - Clientes</title>
-    <link rel="stylesheet" href="css/styles.css?v=3">
+    <link rel="stylesheet" href="css/styles.css?v=4">
 </head>
 <body>
     <nav id="menu" class="menu-superior"></nav>
@@ -73,6 +73,7 @@
                             <th>P. Cliente</th>
                             <th>P. Intcomex</th>
                             <th>Total</th>
+                            <th>Ship &amp; Debit</th>
                             <th>Estado</th>
                             <th>Obs.</th>
                             <th></th>
@@ -152,6 +153,9 @@
                     <label>Total (automático)
                         <input type="text" id="f-total" readonly>
                     </label>
+                    <label>Ship and Debit (12 dígitos, único)
+                        <input type="text" id="f-ship" inputmode="numeric" pattern="[0-9]*" maxlength="12" placeholder="000000000000">
+                    </label>
                     <label>Fecha de Registro (automático)
                         <input type="text" id="f-fechaRegistro" readonly>
                     </label>
@@ -170,7 +174,7 @@
         </div>
     </div>
 
-    <script src="js/crm.js?v=3"></script>
-    <script src="js/nav.js?v=3"></script>
+    <script src="js/crm.js?v=4"></script>
+    <script src="js/nav.js?v=4"></script>
 </body>
 </html>

@@ -280,6 +280,7 @@ function renderTabla() {
             <td class="crm-num">$${fmt(c.precioCliente)}</td>
             <td class="crm-num">$${fmt(c.precioIntcomex)}</td>
             <td class="crm-num"><strong>$${fmt(totalRegistro(c))}</strong></td>
+            <td class="crm-num">${c.shipAndDebit ? esc(c.shipAndDebit) : "—"}</td>
             <td><span class="crm-estado" style="background:${color}">${esc(c.estado)}</span></td>
             <td class="crm-obs">
                 <button class="${obsCls}" data-id="${c.id}" title="Ver observaciones">Obs</button>
@@ -360,6 +361,7 @@ function abrirModal(registro) {
     document.getElementById("f-fechaRegistro").value = registro ? (registro.fechaRegistro || hoy) : hoy;
     document.getElementById("f-fechaEstado").value = registro ? (registro.fechaEstado || hoy) : hoy;
     document.getElementById("f-estado").value = registro ? registro.estado : "Lead";
+    document.getElementById("f-ship").value = registro ? (registro.shipAndDebit || "") : "";
     document.getElementById("f-obs").value = registro ? (registro.observaciones || "") : "";
     actualizarTotalForm();
     document.getElementById("crm-modal").style.display = "flex";
@@ -379,6 +381,18 @@ function actualizarTotalForm() {
 function guardarForm(e) {
     e.preventDefault();
     const estado = document.getElementById("f-estado").value;
+    const shipVal = document.getElementById("f-ship").value.trim();
+    if (shipVal) {
+        if (!/^\d{12}$/.test(shipVal)) {
+            alert("Ship and Debit debe tener exactamente 12 dígitos numéricos.");
+            return;
+        }
+        const duplicado = clientes.find(c => c.id !== editandoId && String(c.shipAndDebit || "") === shipVal);
+        if (duplicado) {
+            alert("Ship and Debit ya existe en otro registro.");
+            return;
+        }
+    }
     const hoy = new Date().toISOString().slice(0, 10);
     let anterior = null;
     if (editandoId) {
@@ -394,6 +408,7 @@ function guardarForm(e) {
         skuPromo: document.getElementById("f-skuPromo").value.trim(),
         precioCliente: Number(document.getElementById("f-precioCliente").value) || 0,
         precioIntcomex: Number(document.getElementById("f-precioIntcomex").value) || 0,
+        shipAndDebit: shipVal,
         fechaEstimada: document.getElementById("f-fecha").value,
         estado: estado,
         observaciones: document.getElementById("f-obs").value.trim()
@@ -415,10 +430,10 @@ function guardarForm(e) {
 }
 
 function exportarCSV() {
-    const hdr = ["Region", "Canal", "Linea", "SKU", "Unidades", "Promo", "skuPromo", "PrecioCliente", "PrecioIntcomex", "FechaEstimada", "Total", "Estado", "FechaRegistro", "FechaEstado", "Observaciones"];
+    const hdr = ["Region", "Canal", "Linea", "SKU", "Unidades", "Promo", "skuPromo", "PrecioCliente", "PrecioIntcomex", "FechaEstimada", "Total", "ShipAndDebit", "Estado", "FechaRegistro", "FechaEstado", "Observaciones"];
     const lines = [hdr.join(",")];
     clientes.forEach(c => {
-        const vals = [c.region, c.canal, c.linea, c.sku, c.unidades, c.promo, c.skuPromo, c.precioCliente, c.precioIntcomex, c.fechaEstimada, totalRegistro(c), c.estado, c.fechaRegistro, c.fechaEstado, c.observaciones];
+        const vals = [c.region, c.canal, c.linea, c.sku, c.unidades, c.promo, c.skuPromo, c.precioCliente, c.precioIntcomex, c.fechaEstimada, totalRegistro(c), c.shipAndDebit || "", c.estado, c.fechaRegistro, c.fechaEstado, c.observaciones];
         lines.push(vals.map(v => {
             v = (v === null || v === undefined) ? "" : String(v);
             return /[",;\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
@@ -473,6 +488,7 @@ function importarCSV(file) {
                 skuPromo: g("skupromo"),
                 precioCliente: num("preciocliente"),
                 precioIntcomex: num("preciointcomex"),
+                shipAndDebit: g("shipanddebit"),
                 fechaEstimada: g("fechaestimada") || g("fecha"),
                 estado: g("estado"),
                 fechaRegistro: g("fecharegistro"),
