@@ -1,21 +1,27 @@
 const ESTADOS = [
+    "Lead",
+    "Cotizado",
+    "En Negociación",
     "Facturado",
-    "Enviado a Facturar",
-    "Pendiente confirmacion PM",
-    "Pendiente SKU promo y Carta",
-    "Pendiente lanzamiento",
-    "En Negociacion",
-    "Cotizacion"
+    "Cerrado"
 ];
 
 const ESTADO_COLORS = {
+    "Lead": "#6366f1",
+    "Cotizado": "#3b82f6",
+    "En Negociación": "#f59e0b",
     "Facturado": "#22c55e",
-    "Enviado a Facturar": "#84cc16",
-    "Pendiente confirmacion PM": "#eab308",
-    "Pendiente SKU promo y Carta": "#f97316",
-    "Pendiente lanzamiento": "#f59e0b",
-    "En Negociacion": "#3b82f6",
-    "Cotizacion": "#64748b"
+    "Cerrado": "#64748b"
+};
+
+const MAPA_ESTADOS = {
+    "Facturado": "Facturado",
+    "Enviado a Facturar": "En Negociación",
+    "Pendiente confirmacion PM": "En Negociación",
+    "Pendiente SKU promo y Carta": "En Negociación",
+    "Pendiente lanzamiento": "En Negociación",
+    "En Negociacion": "En Negociación",
+    "Cotizacion": "Cotizado"
 };
 
 const REGIONES = [
@@ -27,6 +33,7 @@ const REGIONES = [
 const STORAGE_KEY = "crm_clientes_v1";
 const NOTES_KEY = "crm_notas_v1";
 const MIGRADO_KEY = "crm_fechas_migrado_v1";
+const MIGRADO_ESTADOS_KEY = "crm_estados_migrado_v1";
 const API_URL = "api.php";
 
 let clientes = [];
@@ -34,6 +41,9 @@ let notas = "";
 let editandoId = null;
 let usandoAPI = true;
 let regionPorCanal = {};
+let filtroRegiones = [];
+let filtroClientes = [];
+let notasCalendario = {};
 
 function seedData() {
     const hoy = new Date().toISOString().slice(0, 10);
@@ -82,6 +92,20 @@ function migrarFechas() {
     localStorage.setItem(MIGRADO_KEY, "1");
 }
 
+function migrarEstados() {
+    if (localStorage.getItem(MIGRADO_ESTADOS_KEY)) return;
+    let cambio = false;
+    clientes.forEach(c => {
+        const nuevo = MAPA_ESTADOS[c.estado];
+        if (nuevo && c.estado !== nuevo) {
+            c.estado = nuevo;
+            cambio = true;
+        }
+    });
+    if (cambio) saveData();
+    localStorage.setItem(MIGRADO_ESTADOS_KEY, "1");
+}
+
 function loadData() {
     fetch(API_URL, { cache: "no-store" })
         .then(res => {
@@ -93,11 +117,12 @@ function loadData() {
             const vacio = clientes.length === 0;
             if (vacio) clientes = seedData();
             migrarFechas();
+            migrarEstados();
             if (vacio) saveData();
-            notas = data.notas || "";
+            notas = "";
             usandoAPI = true;
-            document.getElementById("crm-notas-texto").value = notas;
             renderAll();
+            cargarNotasCalendario();
         })
         .catch(() => {
             usandoAPI = false;
@@ -108,9 +133,10 @@ function loadData() {
                 clientes = seedData();
             }
             migrarFechas();
-            notas = localStorage.getItem(NOTES_KEY) || "";
-            document.getElementById("crm-notas-texto").value = notas;
+            migrarEstados();
+            notas = "";
             renderAll();
+            cargarNotasCalendario();
         });
 }
 
@@ -162,28 +188,35 @@ function renderFiltros() {
     const regiones = [...new Set(clientes.map(c => c.region).filter(Boolean))].sort();
     const canales = [...new Set(clientes.map(c => c.canal).filter(Boolean))].sort();
 
-    const selR = document.getElementById("filtro-region");
-    const actualR = selR.value;
-    selR.innerHTML = '<option value="">TODAS LAS REGIONES</option>' +
-        regiones.map(r => `<option value="${r}">${r}</option>`).join("");
-    selR.value = actualR;
+    const popR = document.getElementById("filtro-region-popup");
+    popR.innerHTML = regiones.map(r =>
+        `<label class="crm-multi-opcion"><input type="checkbox" value="${esc(r)}" ${filtroRegiones.includes(r) ? "checked" : ""}> ${esc(r)}</label>`
+    ).join("") || '<div class="nota-sin">Sin regiones</div>';
 
-    const selC = document.getElementById("filtro-cliente");
-    const actualC = selC.value;
-    selC.innerHTML = '<option value="">TODOS LOS CLIENTES</option>' +
-        canales.map(c => `<option value="${c}">${c}</option>`).join("");
-    selC.value = actualC;
+    const popC = document.getElementById("filtro-cliente-popup");
+    popC.innerHTML = canales.map(c =>
+        `<label class="crm-multi-opcion"><input type="checkbox" value="${esc(c)}" ${filtroClientes.includes(c) ? "checked" : ""}> ${esc(c)}</label>`
+    ).join("") || '<div class="nota-sin">Sin clientes</div>';
 
     const selE = document.getElementById("filtro-estado");
     const actualE = selE.value;
     selE.innerHTML = '<option value="">TODOS LOS ESTADOS</option>' +
         ESTADOS.map(e => `<option value="${e}">${e}</option>`).join("");
     selE.value = actualE;
+
+    actualizarBadgeFiltros();
+}
+
+function actualizarBadgeFiltros() {
+    const br = document.getElementById("filtro-region-badge");
+    br.textContent = filtroRegiones.length;
+    br.style.display = filtroRegiones.length ? "inline-block" : "none";
+    const bc = document.getElementById("filtro-cliente-badge");
+    bc.textContent = filtroClientes.length;
+    bc.style.display = filtroClientes.length ? "inline-block" : "none";
 }
 
 function filtrados() {
-    const r = document.getElementById("filtro-region").value;
-    const c = document.getElementById("filtro-cliente").value;
     const e = document.getElementById("filtro-estado").value;
     const feD = document.getElementById("filtro-fe-desde").value;
     const feH = document.getElementById("filtro-fe-hasta").value;
@@ -193,8 +226,8 @@ function filtrados() {
     const fsH = document.getElementById("filtro-fs-hasta").value;
     const entre = (v, d, h) => (v ? ((!d || v >= d) && (!h || v <= h)) : (!d && !h));
     return clientes.filter(x =>
-        (!r || x.region === r) &&
-        (!c || x.canal === c) &&
+        (!filtroRegiones.length || filtroRegiones.includes(x.region)) &&
+        (!filtroClientes.length || filtroClientes.includes(x.canal)) &&
         (!e || x.estado === e) &&
         entre(x.fechaEstimada, feD, feH) &&
         entre(x.fechaRegistro, frD, frH) &&
@@ -215,6 +248,7 @@ function renderTabla() {
     const vacio = document.getElementById("crm-vacio");
     tbody.innerHTML = rows.map(c => {
         const color = ESTADO_COLORS[c.estado] || "#64748b";
+        const obsCls = c.observaciones ? "crm-obs-btn crm-obs-tiene" : "crm-obs-btn crm-obs-vacio";
         return `<tr>
             <td><strong>${esc(c.canal)}</strong></td>
             <td>${esc(c.region)}</td>
@@ -226,14 +260,16 @@ function renderTabla() {
             <td class="crm-num">$${fmt(c.precioIntcomex)}</td>
             <td class="crm-num"><strong>$${fmt(totalRegistro(c))}</strong></td>
             <td><span class="crm-estado" style="background:${color}">${esc(c.estado)}</span></td>
-            <td class="crm-obs" title="${esc(c.observaciones)}">${esc(c.observaciones)}</td>
-            <td class="crm-acciones">
-                <button class="filtro-btn crm-edit" data-id="${c.id}">Editar</button>
-                <button class="filtro-btn crm-del" data-id="${c.id}">Eliminar</button>
+            <td class="crm-obs">
+                <button class="${obsCls}" data-id="${c.id}" title="Ver observaciones">Obs</button>
             </td>
-            <td class="crm-num">${fmtFecha(c.fechaEstimada)}</td>
-            <td class="crm-num">${fmtFecha(c.fechaRegistro)}</td>
-            <td class="crm-num">${fmtFecha(c.fechaEstado)}</td>
+            <td class="crm-acciones">
+                <button class="crm-icono crm-edit" data-id="${c.id}" title="Editar">&#9998;</button>
+                <button class="crm-icono crm-del" data-id="${c.id}" title="Eliminar">&#128465;</button>
+            </td>
+            <td class="crm-num crm-fecha">${fmtFecha(c.fechaEstimada)}</td>
+            <td class="crm-num crm-fecha">${fmtFecha(c.fechaRegistro)}</td>
+            <td class="crm-num crm-fecha">${fmtFecha(c.fechaEstado)}</td>
         </tr>`;
     }).join("");
     vacio.style.display = rows.length ? "none" : "block";
@@ -302,7 +338,7 @@ function abrirModal(registro) {
     const hoy = new Date().toISOString().slice(0, 10);
     document.getElementById("f-fechaRegistro").value = registro ? (registro.fechaRegistro || hoy) : hoy;
     document.getElementById("f-fechaEstado").value = registro ? (registro.fechaEstado || hoy) : hoy;
-    document.getElementById("f-estado").value = registro ? registro.estado : "Cotizacion";
+    document.getElementById("f-estado").value = registro ? registro.estado : "Lead";
     document.getElementById("f-obs").value = registro ? (registro.observaciones || "") : "";
     actualizarTotalForm();
     document.getElementById("crm-modal").style.display = "flex";
@@ -436,20 +472,102 @@ function importarCSV(file) {
     reader.readAsText(file);
 }
 
-function guardarNotas() {
-    notas = document.getElementById("crm-notas-texto").value;
-    saveData();
-    const msg = document.getElementById("crm-notas-save-msg");
-    msg.textContent = "Notas guardadas.";
-    setTimeout(() => { msg.textContent = ""; }, 2000);
+function cargarNotasCalendario() {
+    fetch("api.php?tipo=calendario", { cache: "no-store" })
+        .then(res => {
+            if (!res.ok) throw new Error("api");
+            return res.json();
+        })
+        .then(data => {
+            notasCalendario = (data && typeof data === "object" && !Array.isArray(data)) ? data : {};
+            renderBell();
+        })
+        .catch(() => {
+            notasCalendario = {};
+            renderBell();
+        });
+}
+
+function renderBell() {
+    const hoy = new Date();
+    const hoyISO = hoy.toISOString().slice(0, 10);
+    const inicio = new Date(hoy);
+    inicio.setDate(hoy.getDate() - 3);
+    const fin = new Date(hoy);
+    fin.setDate(hoy.getDate() + 5);
+    const inicioISO = inicio.toISOString().slice(0, 10);
+    const finISO = fin.toISOString().slice(0, 10);
+
+    const fechas = Object.keys(notasCalendario).sort();
+    const list = fechas.filter(f => f >= inicioISO && f <= finISO).map(f => {
+        const cls = f === hoyISO ? "bell-dia-hoy" : (f < hoyISO ? "bell-dia-pasado" : "bell-dia-futuro");
+        const fecha = new Date(f + "T12:00:00");
+        const label = fecha.toLocaleDateString("es-ES", { weekday: "short", day: "numeric", month: "short" });
+        return `<div class="bell-item ${cls}">
+            <div class="bell-dia">${label}</div>
+            <div class="bell-nota">${esc(notasCalendario[f])}</div>
+        </div>`;
+    }).join("");
+
+    const listEl = document.getElementById("crm-bell-list");
+    listEl.innerHTML = list || '<div class="nota-sin">Sin notas en los próximos días</div>';
+
+    const badge = document.getElementById("crm-bell-badge");
+    const total = fechas.filter(f => f >= inicioISO && f <= finISO).length;
+    badge.textContent = total;
+    badge.style.display = total ? "inline-block" : "none";
+}
+
+function abrirObsPopup(id) {
+    const rec = clientes.find(c => c.id === id);
+    if (!rec) return;
+    const nombre = rec.canal || "Registro";
+    document.getElementById("crm-obs-titulo").textContent = `OBSERVACIONES · ${nombre}`;
+    document.getElementById("crm-obs-texto").textContent = rec.observaciones || "Sin observaciones.";
+    document.getElementById("crm-obs-popup").style.display = "flex";
 }
 
 function setup() {
     loadData();
 
-    document.getElementById("filtro-region").addEventListener("change", renderTabla);
-    document.getElementById("filtro-cliente").addEventListener("change", renderTabla);
     document.getElementById("filtro-estado").addEventListener("change", renderTabla);
+
+    const regionBtn = document.getElementById("filtro-region-btn");
+    const regionPop = document.getElementById("filtro-region-popup");
+    regionBtn.addEventListener("click", ev => {
+        ev.stopPropagation();
+        regionPop.style.display = regionPop.style.display === "block" ? "none" : "block";
+        clientePop.style.display = "none";
+    });
+    regionPop.addEventListener("change", () => {
+        filtroRegiones = [...regionPop.querySelectorAll("input:checked")].map(i => i.value);
+        actualizarBadgeFiltros();
+        renderTabla();
+    });
+
+    const clienteBtn = document.getElementById("filtro-cliente-btn");
+    const clientePop = document.getElementById("filtro-cliente-popup");
+    clienteBtn.addEventListener("click", ev => {
+        ev.stopPropagation();
+        clientePop.style.display = clientePop.style.display === "block" ? "none" : "block";
+        regionPop.style.display = "none";
+    });
+    clientePop.addEventListener("change", () => {
+        filtroClientes = [...clientePop.querySelectorAll("input:checked")].map(i => i.value);
+        actualizarBadgeFiltros();
+        renderTabla();
+    });
+
+    document.addEventListener("click", ev => {
+        if (!ev.target.closest(".crm-multi-wrap")) {
+            regionPop.style.display = "none";
+            clientePop.style.display = "none";
+        }
+        if (!ev.target.closest(".crm-fechas-wrap")) {
+            fechasPopup.style.display = "none";
+        }
+    });
+
     ["filtro-fe-desde", "filtro-fe-hasta", "filtro-fr-desde", "filtro-fr-hasta", "filtro-fs-desde", "filtro-fs-hasta"].forEach(id => {
         document.getElementById(id).addEventListener("change", () => {
             renderTabla();
@@ -471,11 +589,6 @@ function setup() {
         });
         renderTabla();
         actualizarBadgeFechas();
-    });
-    document.addEventListener("click", ev => {
-        if (!ev.target.closest(".crm-fechas-wrap")) {
-            fechasPopup.style.display = "none";
-        }
     });
 
     const selEstado = document.getElementById("f-estado");
@@ -513,7 +626,26 @@ function setup() {
         if (ev.target.files[0]) importarCSV(ev.target.files[0]);
         ev.target.value = "";
     });
-    document.getElementById("crm-notas-save").addEventListener("click", guardarNotas);
+
+    document.getElementById("crm-obs-cerrar").addEventListener("click", () => {
+        document.getElementById("crm-obs-popup").style.display = "none";
+    });
+    document.getElementById("crm-obs-popup").addEventListener("click", ev => {
+        if (ev.target.id === "crm-obs-popup") document.getElementById("crm-obs-popup").style.display = "none";
+    });
+
+    const bellBtn = document.getElementById("crm-bell");
+    const bellPop = document.getElementById("crm-bell-popup");
+    bellBtn.addEventListener("click", ev => {
+        ev.stopPropagation();
+        bellPop.style.display = bellPop.style.display === "block" ? "none" : "block";
+        if (bellPop.style.display === "block") renderBell();
+    });
+    document.addEventListener("click", ev => {
+        if (!ev.target.closest(".crm-bell-wrap")) {
+            bellPop.style.display = "none";
+        }
+    });
 
     document.getElementById("crm-tbody").addEventListener("click", ev => {
         const btn = ev.target.closest("button");
@@ -528,6 +660,8 @@ function setup() {
                 saveData();
                 renderAll();
             }
+        } else if (btn.classList.contains("crm-obs-btn")) {
+            abrirObsPopup(id);
         }
     });
 

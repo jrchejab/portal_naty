@@ -22,8 +22,14 @@
         <div id="crm-resumen" class="crm-resumen"></div>
 
         <div class="crm-filtros">
-            <select id="filtro-region"><option value="">TODAS LAS REGIONES</option></select>
-            <select id="filtro-cliente"><option value="">TODOS LOS CLIENTES</option></select>
+            <div class="crm-multi-wrap">
+                <button id="filtro-region-btn" class="filtro-btn">REGIONES <span id="filtro-region-badge" class="crm-fechas-badge" style="display:none"></span></button>
+                <div id="filtro-region-popup" class="crm-multi-popup" style="display:none"></div>
+            </div>
+            <div class="crm-multi-wrap">
+                <button id="filtro-cliente-btn" class="filtro-btn">CLIENTES <span id="filtro-cliente-badge" class="crm-fechas-badge" style="display:none"></span></button>
+                <div id="filtro-cliente-popup" class="crm-multi-popup" style="display:none"></div>
+            </div>
             <select id="filtro-estado"><option value="">TODOS LOS ESTADOS</option></select>
             <div class="crm-fechas-wrap">
                 <button id="crm-fechas-btn" class="filtro-btn">FECHAS <span id="crm-fechas-badge" class="crm-fechas-badge" style="display:none"></span></button>
@@ -79,17 +85,27 @@
                 </table>
                 <div id="crm-vacio" class="sin-feriados" style="display:none">No hay registros.</div>
             </div>
-
-            <div class="crm-notas">
-                <h2>NOTAS Y PENDIENTES</h2>
-                <textarea id="crm-notas-texto" rows="6" placeholder="Notas, reuniones, pendientes, acciones..."></textarea>
-                <div class="crm-notas-pie">
-                    <span id="crm-notas-save-msg" class="nota"></span>
-                    <button id="crm-notas-save" class="filtro-btn">GUARDAR NOTAS</button>
-                </div>
-            </div>
         </main>
     </div>
+
+    <div class="crm-bell-wrap">
+        <button id="crm-bell" class="crm-bell" title="Notificaciones del calendario">&#128276; <span id="crm-bell-badge" class="crm-fechas-badge" style="display:none"></span></button>
+        <div id="crm-bell-popup" class="crm-bell-popup" style="display:none">
+            <div class="crm-bell-titulo">NOTAS DEL CALENDARIO</div>
+            <div id="crm-bell-list" class="crm-bell-list"></div>
+        </div>
+    </div>
+
+    <div id="crm-obs-popup" class="crm-obs-popup" style="display:none">
+        <div class="crm-obs-popup-box">
+            <div class="nota-panel-header">
+                <span id="crm-obs-titulo" class="nota-fecha"></span>
+                <button id="crm-obs-cerrar" class="filtro-btn">✕</button>
+            </div>
+            <div id="crm-obs-texto" class="crm-obs-texto"></div>
+        </div>
+    </div>
+
 
     <div id="crm-modal" class="crm-modal" style="display:none">
         <div class="crm-modal-box">

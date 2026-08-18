@@ -123,10 +123,11 @@ function renderMonthEl(container, year, month) {
         div.appendChild(indicators);
 
         if (notasCal[dateStr]) {
-            const nd = document.createElement("span");
-            nd.className = "nota-indicador";
-            nd.title = "Tiene nota";
-            div.appendChild(nd);
+            const nt = document.createElement("div");
+            nt.className = "nota-texto-celda";
+            nt.textContent = notasCal[dateStr];
+            nt.title = notasCal[dateStr];
+            div.appendChild(nt);
         }
 
         div.addEventListener("click", (e) => {
@@ -512,6 +513,13 @@ function setupViewToggle() {
     });
 }
 
+function mesInicial() {
+    const now = new Date();
+    if (now.getFullYear() !== YEAR) return 0;
+    const idx = now.getMonth() - MONTH_OFFSET;
+    return Math.max(0, Math.min(idx, MONTHS.length - 1));
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     setupFilters();
     setupNavigation();
@@ -524,6 +532,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.target.id === "nota-panel") cerrarPanelNota();
     });
 
+    currentStart = mesInicial();
     renderCurrent();
     cargarNotasCal();
 });
