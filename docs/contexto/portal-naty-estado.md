@@ -71,8 +71,6 @@ Chile, Colombia, Costa Rica, Ecuador, El Salvador, Guatemala, Honduras, México,
 
 ## Git
 
-- **Cuenta objetivo del proyecto**: `poordesigner` (indicado por el dueño). Es la única cuenta a usar con este proyecto salvo indicación contraria.
-- **Estado actual**: el repo vive en `jrchejab/portal_naty` (aún no existe `poordesigner/portal_naty`). Cuando el dueño cree el repo en la cuenta poordesigner, se debe cambiar el remote a `https://poordesigner@github.com/poordesigner/portal_naty.git` y pushear.
-- Remote actual: `https://jrchejab@github.com/jrchejab/portal_naty.git`
-- **IMPORTANTE**: Windows Credential Manager tiene varias cuentas GitHub (poordesigner, jrchejab, tachoatomico, x-access-token). El usuario explícito en la URL (`jrchejab@` o `poordesigner@`) fuerza la cuenta correcta al hacer push.
-- El proyecto también se conoce como **ARTid** (SaaS de fichas de obra con QR).
+- Usuario: `jrchejab` (`jrchejab@gmail.com`)
+- Remote: `https://jrchejab@github.com/jrchejab/portal_naty.git`
+- **IMPORTANTE**: la URL del remote lleva `jrchejab@` explícito para forzar la cuenta correcta al hacer push.

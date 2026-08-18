@@ -70,7 +70,7 @@ Se usa HTTPS con un Personal Access Token (PAT) almacenado en Windows Credential
 - Autenticacion: Windows Credential Manager via `credential.helper=manager`
 - El PAT tiene permisos para push a repositorios de la cuenta
 
-> **IMPORTANTE (credential manager)**: en la maquina DELL hay varias credenciales de GitHub guardadas (usuarios: `poordesigner`, `jrchejab`, `tachoatomico`, `x-access-token`). Al pushear, git puede usar la equivocada (ej: `poordesigner`) y dar `403 Permission denied`. Para forzar la cuenta correcta, el remote de este proyecto usa el usuario explicito:
+> **NOTA (remote)**: este proyecto usa la cuenta `jrchejab` únicamente. La URL del remote lleva `jrchejab@` explícito para forzar esa cuenta al hacer push.
 
 ```powershell
 git remote set-url origin https://jrchejab@github.com/jrchejab/portal_naty.git
