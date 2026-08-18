@@ -47,7 +47,7 @@ Chile, Colombia, Costa Rica, Ecuador, El Salvador, Guatemala, Honduras, México,
 
 - `crm.html` + `js/crm.js`
 - Campos: cliente (canal), región, línea, SKU, unidades, promo, skuPromo, precio cliente, precio Intcomex, fecha estimada cierre, estado, observaciones, fecha de registro y fecha de último estado (automáticas)
-- **Estados**: Lead, Cotizado, En Negociación, Facturado, Cerrado
+- **Estados**: Lead, Cotizado, En Negociación, Facturado, Perdido (antes "Cerrado", migrado automáticamente)
 - **Filtros**: Región y Cliente multi-selección (popup con checkboxes), Estado (select), rango de fechas (botón + popup con desde/hasta para cada fecha)
 - CRUD con modal; **observaciones** como botón con popup (color azul si hay, gris si no); **Editar/Eliminar** como iconos con tooltip
 - **Campana 🔔** (top derecha): lista notas del calendario — 3 días anteriores (gris), hoy (verde), 5 siguientes (azul); solo días con nota

@@ -3,7 +3,14 @@ const ESTADOS = [
     "Cotizado",
     "En Negociación",
     "Facturado",
-    "Cerrado"
+    "Perdido"
+];
+
+const ESTADOS_INDICADORES = [
+    "Cotizado",
+    "En Negociación",
+    "Facturado",
+    "Perdido"
 ];
 
 const ESTADO_COLORS = {
@@ -11,7 +18,7 @@ const ESTADO_COLORS = {
     "Cotizado": "#3b82f6",
     "En Negociación": "#f59e0b",
     "Facturado": "#22c55e",
-    "Cerrado": "#64748b"
+    "Perdido": "#64748b"
 };
 
 const MAPA_ESTADOS = {
@@ -21,7 +28,8 @@ const MAPA_ESTADOS = {
     "Pendiente SKU promo y Carta": "En Negociación",
     "Pendiente lanzamiento": "En Negociación",
     "En Negociacion": "En Negociación",
-    "Cotizacion": "Cotizado"
+    "Cotizacion": "Cotizado",
+    "Cerrado": "Perdido"
 };
 
 const REGIONES = [
@@ -176,16 +184,19 @@ function saveData() {
 function renderResumen() {
     const el = document.getElementById("crm-resumen");
     const cont = {};
-    ESTADOS.forEach(e => cont[e] = { n: 0, total: 0 });
+    ESTADOS_INDICADORES.forEach(e => cont[e] = { n: 0, total: 0 });
     let totalGeneral = 0;
+    let totalUnidades = 0;
     clientes.forEach(c => {
-        const e = c.estado || "Cotizacion";
-        if (!cont[e]) cont[e] = { n: 0, total: 0 };
-        cont[e].n++;
-        cont[e].total += totalRegistro(c);
-        totalGeneral += totalRegistro(c);
+        const est = ESTADOS_INDICADORES.includes(c.estado) ? c.estado : null;
+        if (est) {
+            cont[est].n++;
+            cont[est].total += totalRegistro(c);
+        }
+        if (c.estado) totalGeneral += totalRegistro(c);
+        totalUnidades += Number(c.unidades) || 0;
     });
-    let html = ESTADOS.map(e => {
+    let html = ESTADOS_INDICADORES.map(e => {
         const d = cont[e];
         return `<div class="crm-resumen-item" style="border-left:4px solid ${ESTADO_COLORS[e]}">
             <div class="crm-resumen-fila1">
@@ -195,6 +206,12 @@ function renderResumen() {
             <div class="crm-resumen-valor">$${fmt(d.total)}</div>
         </div>`;
     }).join("");
+    html += `<div class="crm-resumen-item">
+        <div class="crm-resumen-fila1">
+            <span class="crm-resumen-nombre">UNIDADES</span>
+        </div>
+        <div class="crm-resumen-valor">${fmt(totalUnidades)}</div>
+    </div>`;
     html += `<div class="crm-resumen-item crm-resumen-total-item">
         <div class="crm-resumen-fila1">
             <span class="crm-resumen-nombre">TOTAL</span>
