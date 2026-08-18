@@ -202,22 +202,32 @@ body {
     text-align: center;
 }
 
+.crm-resumen-fila1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
 .crm-resumen-nombre {
-    font-size: 0.65rem;
+    font-size: 0.8rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.3px;
-    color: #6b7280;
-    margin-bottom: 2px;
+    color: #1a1a2e;
 }
 
 .crm-resumen-cant {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #6b7280;
 }
 
-.crm-resumen-total {
-    font-size: 0.8rem;
-    color: #374151;
+.crm-resumen-valor {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a2e;
 }
 
 .crm-resumen-total-item {
@@ -227,7 +237,11 @@ body {
 }
 
 .crm-resumen-total-item .crm-resumen-nombre,
-.crm-resumen-total-item .crm-resumen-total {
+.crm-resumen-total-item .crm-resumen-valor {
+    color: #fff;
+}
+
+.crm-resumen-total-item .crm-resumen-cant {
     color: #cbd5e1;
 }
 

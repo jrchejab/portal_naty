@@ -188,15 +188,19 @@ function renderResumen() {
     let html = ESTADOS.map(e => {
         const d = cont[e];
         return `<div class="crm-resumen-item" style="border-left:4px solid ${ESTADO_COLORS[e]}">
-            <div class="crm-resumen-nombre">${e}</div>
-            <div class="crm-resumen-cant">${d.n}</div>
-            <div class="crm-resumen-total">$${fmt(d.total)}</div>
+            <div class="crm-resumen-fila1">
+                <span class="crm-resumen-nombre">${e}</span>
+                <span class="crm-resumen-cant">${d.n}</span>
+            </div>
+            <div class="crm-resumen-valor">$${fmt(d.total)}</div>
         </div>`;
     }).join("");
     html += `<div class="crm-resumen-item crm-resumen-total-item">
-        <div class="crm-resumen-nombre">TOTAL</div>
-        <div class="crm-resumen-cant">${clientes.length}</div>
-        <div class="crm-resumen-total">$${fmt(totalGeneral)}</div>
+        <div class="crm-resumen-fila1">
+            <span class="crm-resumen-nombre">TOTAL</span>
+            <span class="crm-resumen-cant">${clientes.length}</span>
+        </div>
+        <div class="crm-resumen-valor">$${fmt(totalGeneral)}</div>
     </div>`;
     el.innerHTML = html;
 }
