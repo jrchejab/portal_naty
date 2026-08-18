@@ -1305,6 +1305,77 @@ header h1 {
     padding: 8px 0;
 }
 
+.ind-bloque {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+}
+
+.ind-bloque h2 {
+    margin: 0 0 12px;
+    font-size: 1rem;
+    color: #1a1a2e;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+}
+
+.ind-bloque h3 {
+    margin: 0 0 8px;
+    font-size: 0.9rem;
+    color: #1a1a2e;
+}
+
+.ind-tabla-wrap {
+    overflow-x: auto;
+}
+
+.ind-total-row td {
+    background: #1a1a2e;
+    color: #fff;
+}
+
+.ind-top-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.ind-top-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #eef1f6;
+    gap: 8px;
+}
+
+.ind-top-pos {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #eef1f6;
+    color: #1a1a2e;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ind-top-nombre {
+    flex: 1;
+    font-size: 0.85rem;
+    color: #1a1a2e;
+}
+
+.ind-top-valor {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #1a1a2e;
+}
+
 @media (max-width: 900px) {
     .semestre-grid {
         grid-template-columns: repeat(2, 1fr);

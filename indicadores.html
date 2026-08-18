@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indicadores por Mes</title>
+    <link rel="stylesheet" href="css/styles.css?v=5">
+</head>
+<body>
+    <nav id="menu" class="menu-superior"></nav>
+    <div class="container-full">
+        <header>
+            <h1>INDICADORES POR MES</h1>
+        </header>
+
+        <div id="ind-meses-selector" class="crm-filtros"></div>
+
+        <section class="ind-bloque">
+            <h2>Resumen por Mes</h2>
+            <div id="ind-resumen" class="crm-resumen"></div>
+        </section>
+
+        <section class="ind-bloque">
+            <h2>Pipeline por Mes</h2>
+            <div class="ind-tabla-wrap">
+                <table class="crm-tabla" id="ind-pipeline">
+                    <thead>
+                        <tr>
+                            <th>Mes</th>
+                            <th>Cotizado</th>
+                            <th>En Negociación</th>
+                            <th>Facturado</th>
+                            <th>Perdido</th>
+                            <th>Backlog</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="ind-bloque">
+            <h2>Tasa de Conversión</h2>
+            <div class="ind-tabla-wrap">
+                <table class="crm-tabla" id="ind-conversion">
+                    <thead>
+                        <tr>
+                            <th>Mes</th>
+                            <th>Facturado ($)</th>
+                            <th>Perdido ($)</th>
+                            <th>Total Cerr.</th>
+                            <th>% Conversión</th>
+                            <th>Unid. Ganadas</th>
+                            <th>Unid. Perdidas</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="ind-bloque">
+            <h2>Top Clientes y Regiones</h2>
+            <div class="ind-top-grid">
+                <div>
+                    <h3>Top Clientes (por $)</h3>
+                    <div id="ind-top-clientes"></div>
+                </div>
+                <div>
+                    <h3>Top Regiones (por $)</h3>
+                    <div id="ind-top-regiones"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ind-bloque">
+            <h2>Desglose por Canal y Región</h2>
+            <div class="crm-filtros">
+                <button id="ind-det-cliente" class="filtro-btn ind-det-btn active">POR CANAL</button>
+                <button id="ind-det-region" class="filtro-btn ind-det-btn">POR REGIÓN</button>
+            </div>
+            <div class="ind-tabla-wrap">
+                <table class="crm-tabla" id="ind-desglose">
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Unidades</th>
+                            <th>Total ($)</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="js/indicadores.js?v=5"></script>
+    <script src="js/nav.js?v=5"></script>
+</body>
+</html>

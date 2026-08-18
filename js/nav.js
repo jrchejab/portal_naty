@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
         { href: "index.html", label: "Calendario" },
         { href: "diferencia-horaria.html", label: "Horarios" },
         { href: "organigrama.html", label: "Organigrama" },
-        { href: "crm.html", label: "CRM" }
+        { href: "crm.html", label: "CRM" },
+        { href: "indicadores.html", label: "Indicadores" }
     ];
     const current = location.pathname.split("/").pop() || "index.html";
     const nav = document.getElementById("menu");
