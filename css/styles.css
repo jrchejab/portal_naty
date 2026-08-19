@@ -682,6 +682,16 @@ body {
 
 .crm-modal-box > label textarea {
     resize: vertical;
+    line-height: 1.5;
+}
+
+.crm-modal-box > label textarea#f-ship {
+    min-height: 70px;
+}
+
+.crm-modal-box > label textarea#f-obs {
+    min-height: 90px;
+    margin-bottom: 4px;
 }
 
 .crm-modal-acciones {

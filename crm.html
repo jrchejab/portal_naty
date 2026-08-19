@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRM - Clientes</title>
-    <link rel="stylesheet" href="css/styles.css?v=8">
+    <link rel="stylesheet" href="css/styles.css?v=9">
 </head>
 <body>
     <nav id="menu" class="menu-superior"></nav>
@@ -155,9 +155,6 @@
                     <label>Total (automático)
                         <input type="text" id="f-total" readonly>
                     </label>
-                    <label>Ship and Debit (alfanumérico, 80 car. máx., varios separados por coma)
-                        <input type="text" id="f-ship" maxlength="80" placeholder="12345, 67890, ...">
-                    </label>
                     <label>Fecha de Registro (automático)
                         <input type="text" id="f-fechaRegistro" readonly>
                     </label>
@@ -165,8 +162,11 @@
                         <input type="text" id="f-fechaEstado" readonly>
                     </label>
                 </div>
+                <label>Ship and Debit (alfanumérico, 80 car. máx., varios separados por coma)
+                    <textarea id="f-ship" rows="3" maxlength="80" placeholder="12345, 67890, ..."></textarea>
+                </label>
                 <label>Observaciones
-                    <textarea id="f-obs" rows="3"></textarea>
+                    <textarea id="f-obs" rows="4"></textarea>
                 </label>
                 <div class="crm-modal-acciones">
                     <button type="button" id="crm-cancelar" class="filtro-btn">CANCELAR</button>
@@ -176,7 +176,7 @@
         </div>
     </div>
 
-    <script src="js/crm.js?v=8"></script>
-    <script src="js/nav.js?v=8"></script>
+    <script src="js/crm.js?v=9"></script>
+    <script src="js/nav.js?v=9"></script>
 </body>
 </html>
