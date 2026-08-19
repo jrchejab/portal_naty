@@ -303,9 +303,9 @@ function renderTabla() {
             <td class="crm-num">${fmt(c.unidades)}</td>
             <td class="crm-fecha">${esc(c.promo)}</td>
             <td class="crm-num">$${fmt(c.precioCliente)}</td>
-            <td class="crm-num">$${fmt(totalRegistro(c))}</td>
+            <td class="crm-num crm-col-total">$${fmt(totalRegistro(c))}</td>
             <td class="crm-num">$${fmt(c.precioIntcomex)}</td>
-            <td class="crm-num"><strong>$${fmt(totalRegistro(c))}</strong></td>
+            <td class="crm-num crm-col-total"><strong>$${fmt(totalRegistro(c))}</strong></td>
             <td>${c.shipAndDebit ? esc(c.shipAndDebit) : "—"}</td>
             <td>${c.orderNo ? esc(c.orderNo) : "—"}</td>
             <td><span class="crm-estado" style="background:${color}">${esc(c.estado)}</span></td>
@@ -347,9 +347,9 @@ function renderTotales(rows) {
         <td class="crm-num">${fmt(sum.u)}</td>
         <td></td>
         <td class="crm-num">$${fmt(sum.p)}</td>
-        <td class="crm-num">$${fmt(sum.pt)}</td>
+        <td class="crm-num crm-col-total">$${fmt(sum.pt)}</td>
         <td class="crm-num">$${fmt(sum.pi)}</td>
-        <td class="crm-num"><strong>$${fmt(sum.t)}</strong></td>
+        <td class="crm-num crm-col-total"><strong>$${fmt(sum.t)}</strong></td>
         <td></td>
         <td></td>
         <td></td>
