@@ -21,6 +21,14 @@ const ESTADO_COLORS = {
     "Perdido": "#64748b"
 };
 
+const ESTADO_PASTEL = {
+    "Lead": "#c7d2fe",
+    "Cotizado": "#bfdbfe",
+    "En Negociación": "#fde68a",
+    "Facturado": "#bbf7d0",
+    "Perdido": "#e2e8f0"
+};
+
 const MAPA_ESTADOS = {
     "Facturado": "Facturado",
     "Enviado a Facturar": "En Negociación",
@@ -285,7 +293,7 @@ function renderTabla() {
     const tbody = document.getElementById("crm-tbody");
     const vacio = document.getElementById("crm-vacio");
     tbody.innerHTML = rows.map(c => {
-        const color = ESTADO_COLORS[c.estado] || "#64748b";
+        const color = ESTADO_PASTEL[c.estado] || "#e2e8f0";
         const obsCls = c.observaciones ? "crm-obs-btn crm-obs-tiene" : "crm-obs-btn crm-obs-vacio";
         return `<tr>
             <td><strong>${esc(c.canal)}</strong></td>
