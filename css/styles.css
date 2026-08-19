@@ -402,6 +402,18 @@ body {
     white-space: nowrap;
 }
 
+.crm-ship {
+    min-width: 150px;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.crm-order {
+    min-width: 80px;
+    white-space: normal;
+    word-break: break-word;
+}
+
 .crm-estado {
     display: inline-block;
     color: #1f2937;

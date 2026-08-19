@@ -306,8 +306,8 @@ function renderTabla() {
             <td class="crm-num crm-col-total">$${fmt(totalRegistro(c))}</td>
             <td class="crm-num">$${fmt(c.precioIntcomex)}</td>
             <td class="crm-num crm-col-total"><strong>$${fmt(totalRegistro(c))}</strong></td>
-            <td>${c.shipAndDebit ? esc(c.shipAndDebit) : "—"}</td>
-            <td>${c.orderNo ? esc(c.orderNo) : "—"}</td>
+            <td class="crm-ship">${c.shipAndDebit ? esc(c.shipAndDebit) : "—"}</td>
+            <td class="crm-order">${c.orderNo ? esc(c.orderNo) : "—"}</td>
             <td><span class="crm-estado" style="background:${color}">${esc(c.estado)}</span></td>
             <td class="crm-obs">
                 <button class="${obsCls}" data-id="${c.id}" title="Ver observaciones">Obs</button>
