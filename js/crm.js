@@ -199,18 +199,21 @@ function saveData() {
 
 function renderResumen() {
     const el = document.getElementById("crm-resumen");
+    const rows = filtrados();
     const cont = {};
     ESTADOS_INDICADORES.forEach(e => cont[e] = { n: 0, total: 0 });
-    let totalGeneral = 0;
     let totalUnidades = 0;
-    clientes.forEach(c => {
+    let totalPTC = 0;
+    let totalGeneral = 0;
+    rows.forEach(c => {
         const est = ESTADOS_INDICADORES.includes(c.estado) ? c.estado : null;
         if (est) {
             cont[est].n++;
-            cont[est].total += totalRegistro(c);
+            cont[est].total += totalPrecioIntcomex(c);
         }
-        if (c.estado) totalGeneral += totalRegistro(c);
         totalUnidades += Number(c.unidades) || 0;
+        totalPTC += totalPrecioCliente(c);
+        totalGeneral += totalPrecioIntcomex(c);
     });
     let html = ESTADOS_INDICADORES.map(e => {
         const d = cont[e];
@@ -223,15 +226,17 @@ function renderResumen() {
         </div>`;
     }).join("");
     html += `<div class="crm-resumen-item">
-        <div class="crm-resumen-fila1">
-            <span class="crm-resumen-nombre">UNIDADES</span>
-        </div>
+        <div class="crm-resumen-fila1"><span class="crm-resumen-nombre">UNIDADES</span></div>
         <div class="crm-resumen-valor">${fmt(totalUnidades)}</div>
+    </div>`;
+    html += `<div class="crm-resumen-item">
+        <div class="crm-resumen-fila1"><span class="crm-resumen-nombre">P. CLIENTE TOTAL</span></div>
+        <div class="crm-resumen-valor">$${fmt(totalPTC)}</div>
     </div>`;
     html += `<div class="crm-resumen-item crm-resumen-total-item">
         <div class="crm-resumen-fila1">
             <span class="crm-resumen-nombre">TOTAL</span>
-            <span class="crm-resumen-cant">${clientes.length}</span>
+            <span class="crm-resumen-cant">${rows.length}</span>
         </div>
         <div class="crm-resumen-valor">$${fmt(totalGeneral)}</div>
     </div>`;
@@ -389,6 +394,11 @@ function actualizarBadgeFechas() {
 function renderAll() {
     renderResumen();
     renderFiltros();
+    renderTabla();
+}
+
+function refrescar() {
+    renderResumen();
     renderTabla();
 }
 
@@ -647,7 +657,7 @@ function abrirObsPopup(id) {
 function setup() {
     loadData();
 
-    document.getElementById("filtro-estado").addEventListener("change", renderTabla);
+    document.getElementById("filtro-estado").addEventListener("change", refrescar);
 
     const regionBtn = document.getElementById("filtro-region-btn");
     const regionPop = document.getElementById("filtro-region-popup");
@@ -659,7 +669,7 @@ function setup() {
     regionPop.addEventListener("change", () => {
         filtroRegiones = [...regionPop.querySelectorAll("input:checked")].map(i => i.value);
         actualizarBadgeFiltros();
-        renderTabla();
+        refrescar();
     });
 
     const clienteBtn = document.getElementById("filtro-cliente-btn");
@@ -672,7 +682,7 @@ function setup() {
     clientePop.addEventListener("change", () => {
         filtroClientes = [...clientePop.querySelectorAll("input:checked")].map(i => i.value);
         actualizarBadgeFiltros();
-        renderTabla();
+        refrescar();
     });
 
     document.addEventListener("click", ev => {
@@ -687,7 +697,7 @@ function setup() {
 
     ["filtro-fe-desde", "filtro-fe-hasta", "filtro-fr-desde", "filtro-fr-hasta", "filtro-fs-desde", "filtro-fs-hasta"].forEach(id => {
         document.getElementById(id).addEventListener("change", () => {
-            renderTabla();
+            refrescar();
             actualizarBadgeFechas();
         });
     });
@@ -704,7 +714,7 @@ function setup() {
         ["filtro-fe-desde", "filtro-fe-hasta", "filtro-fr-desde", "filtro-fr-hasta", "filtro-fs-desde", "filtro-fs-hasta"].forEach(id => {
             document.getElementById(id).value = "";
         });
-        renderTabla();
+        refrescar();
         actualizarBadgeFechas();
     });
 
