@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRM - Clientes</title>
-    <link rel="stylesheet" href="css/styles.css?v=9">
+    <link rel="stylesheet" href="css/styles.css?v=10">
 </head>
 <body>
     <nav id="menu" class="menu-superior"></nav>
@@ -75,6 +75,7 @@
                             <th>P. Intcomex</th>
                             <th>Total</th>
                             <th>Ship &amp; Debit</th>
+                            <th># Order</th>
                             <th>Estado</th>
                             <th>Obs.</th>
                             <th></th>
@@ -146,6 +147,9 @@
                     <label>Precio Intcomex
                         <input type="number" id="f-precioIntcomex" min="0" step="0.01" value="0">
                     </label>
+                    <label># Order (alfanumérico, 12 car. máx.)
+                        <input type="text" id="f-order" maxlength="12" placeholder="ABC123456789">
+                    </label>
                     <label>Fecha Estimada Cierre
                         <input type="date" id="f-fecha">
                     </label>
@@ -176,7 +180,7 @@
         </div>
     </div>
 
-    <script src="js/crm.js?v=9"></script>
-    <script src="js/nav.js?v=9"></script>
+    <script src="js/crm.js?v=10"></script>
+    <script src="js/nav.js?v=10"></script>
 </body>
 </html>
