@@ -81,6 +81,14 @@ function totalRegistro(c) {
     return Math.round((Number(c.unidades) || 0) * (Number(c.precioCliente) || 0) * 100) / 100;
 }
 
+function totalPrecioCliente(c) {
+    return Math.round((Number(c.unidades) || 0) * (Number(c.precioCliente) || 0) * 100) / 100;
+}
+
+function totalPrecioIntcomex(c) {
+    return Math.round((Number(c.unidades) || 0) * (Number(c.precioIntcomex) || 0) * 100) / 100;
+}
+
 function fmt(n) {
     const v = Number(n) || 0;
     return v.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
@@ -303,9 +311,9 @@ function renderTabla() {
             <td class="crm-num">${fmt(c.unidades)}</td>
             <td class="crm-fecha">${esc(c.promo)}</td>
             <td class="crm-num">$${fmt(c.precioCliente)}</td>
-            <td class="crm-num crm-col-total">$${fmt(totalRegistro(c))}</td>
+            <td class="crm-num crm-col-total">$${fmt(totalPrecioCliente(c))}</td>
             <td class="crm-num">$${fmt(c.precioIntcomex)}</td>
-            <td class="crm-num crm-col-total"><strong>$${fmt(totalRegistro(c))}</strong></td>
+            <td class="crm-num crm-col-total"><strong>$${fmt(totalPrecioIntcomex(c))}</strong></td>
             <td class="crm-ship">${c.shipAndDebit ? esc(c.shipAndDebit) : "—"}</td>
             <td class="crm-order">${c.orderNo ? esc(c.orderNo) : "—"}</td>
             <td><span class="crm-estado" style="background:${color}">${esc(c.estado)}</span></td>
@@ -335,9 +343,9 @@ function renderTotales(rows) {
     rows.forEach(c => {
         sum.u += Number(c.unidades) || 0;
         sum.p += Number(c.precioCliente) || 0;
-        sum.pt += totalRegistro(c);
+        sum.pt += totalPrecioCliente(c);
         sum.pi += Number(c.precioIntcomex) || 0;
-        sum.t += totalRegistro(c);
+        sum.t += totalPrecioIntcomex(c);
     });
     tfoot.innerHTML = `<tr class="crm-total-fila">
         <td><strong>TOTALES</strong></td>
