@@ -306,7 +306,7 @@ function renderTabla() {
             <td class="crm-num">$${fmt(totalRegistro(c))}</td>
             <td class="crm-num">$${fmt(c.precioIntcomex)}</td>
             <td class="crm-num"><strong>$${fmt(totalRegistro(c))}</strong></td>
-            <td class="crm-num">${c.shipAndDebit ? esc(c.shipAndDebit) : "—"}</td>
+            <td>${c.shipAndDebit ? esc(c.shipAndDebit) : "—"}</td>
             <td><span class="crm-estado" style="background:${color}">${esc(c.estado)}</span></td>
             <td class="crm-obs">
                 <button class="${obsCls}" data-id="${c.id}" title="Ver observaciones">Obs</button>
@@ -444,12 +444,12 @@ function guardarForm(e) {
     e.preventDefault();
     const estado = document.getElementById("f-estado").value;
     const shipVal = document.getElementById("f-ship").value.trim();
+    if (shipVal && shipVal.length > 80) {
+        alert("Ship and Debit no puede superar 80 caracteres.");
+        return;
+    }
     if (shipVal) {
-        if (!/^\d{12}$/.test(shipVal)) {
-            alert("Ship and Debit debe tener exactamente 12 dígitos numéricos.");
-            return;
-        }
-        const duplicado = clientes.find(c => c.id !== editandoId && String(c.shipAndDebit || "") === shipVal);
+        const duplicado = clientes.find(c => c.id !== editandoId && String(c.shipAndDebit || "").trim() === shipVal);
         if (duplicado) {
             alert("Ship and Debit ya existe en otro registro.");
             return;
