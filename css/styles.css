@@ -369,7 +369,14 @@ body {
 }
 
 .crm-tabla tr:hover td {
-    background: #fafbfc;
+    background: #f8fafc;
+}
+
+.crm-total-fila td {
+    background: #f1f5f9;
+    border-top: 2px solid #1a1a2e;
+    font-size: 0.85rem;
+    font-weight: 700;
 }
 
 .crm-num {

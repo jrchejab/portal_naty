@@ -293,8 +293,9 @@ function renderTabla() {
             <td>${esc(c.linea)}</td>
             <td>${esc(c.sku)}</td>
             <td class="crm-num">${fmt(c.unidades)}</td>
-            <td>${esc(c.promo)}</td>
+            <td class="crm-fecha">${esc(c.promo)}</td>
             <td class="crm-num">$${fmt(c.precioCliente)}</td>
+            <td class="crm-num">$${fmt(totalRegistro(c))}</td>
             <td class="crm-num">$${fmt(c.precioIntcomex)}</td>
             <td class="crm-num"><strong>$${fmt(totalRegistro(c))}</strong></td>
             <td class="crm-num">${c.shipAndDebit ? esc(c.shipAndDebit) : "—"}</td>
@@ -312,6 +313,42 @@ function renderTabla() {
         </tr>`;
     }).join("");
     vacio.style.display = rows.length ? "none" : "block";
+    renderTotales(rows);
+}
+
+function renderTotales(rows) {
+    const tfoot = document.getElementById("crm-tfoot");
+    if (!rows.length) {
+        tfoot.innerHTML = "";
+        return;
+    }
+    const sum = { u: 0, p: 0, pt: 0, pi: 0, t: 0 };
+    rows.forEach(c => {
+        sum.u += Number(c.unidades) || 0;
+        sum.p += Number(c.precioCliente) || 0;
+        sum.pt += totalRegistro(c);
+        sum.pi += Number(c.precioIntcomex) || 0;
+        sum.t += totalRegistro(c);
+    });
+    tfoot.innerHTML = `<tr class="crm-total-fila">
+        <td><strong>TOTALES</strong></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="crm-num">${fmt(sum.u)}</td>
+        <td></td>
+        <td class="crm-num">$${fmt(sum.p)}</td>
+        <td class="crm-num">$${fmt(sum.pt)}</td>
+        <td class="crm-num">$${fmt(sum.pi)}</td>
+        <td class="crm-num"><strong>$${fmt(sum.t)}</strong></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>`;
 }
 
 function esc(s) {
