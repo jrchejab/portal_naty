@@ -225,11 +225,11 @@ function renderResumen() {
             <div class="crm-resumen-valor">$${fmt(d.total)}</div>
         </div>`;
     }).join("");
-    html += `<div class="crm-resumen-item">
+    html += `<div class="crm-resumen-item" style="border-left:4px solid #6366f1">
         <div class="crm-resumen-fila1"><span class="crm-resumen-nombre">UNIDADES</span></div>
         <div class="crm-resumen-valor">${fmt(totalUnidades)}</div>
     </div>`;
-    html += `<div class="crm-resumen-item">
+    html += `<div class="crm-resumen-item" style="border-left:4px solid #0ea5e9">
         <div class="crm-resumen-fila1"><span class="crm-resumen-nombre">P. CLIENTE TOTAL</span></div>
         <div class="crm-resumen-valor">$${fmt(totalPTC)}</div>
     </div>`;

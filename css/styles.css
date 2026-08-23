@@ -178,13 +178,13 @@ body {
 }
 
 .crm-btn-primary {
-    background: #1a1a2e !important;
+    background: #4f46e5 !important;
     color: #fff !important;
-    border-color: #1a1a2e !important;
+    border-color: #4f46e5 !important;
 }
 
 .crm-btn-primary:hover {
-    background: #2d2d4e !important;
+    background: #4338ca !important;
 }
 
 .crm-resumen {
@@ -231,9 +231,9 @@ body {
 }
 
 .crm-resumen-total-item {
-    background: #1a1a2e;
+    background: #4338ca;
     color: #fff;
-    border-color: #1a1a2e;
+    border-color: #4338ca;
 }
 
 .crm-resumen-total-item .crm-resumen-nombre,
@@ -242,7 +242,7 @@ body {
 }
 
 .crm-resumen-total-item .crm-resumen-cant {
-    color: #cbd5e1;
+    color: #c7d2fe;
 }
 
 .crm-filtros {
