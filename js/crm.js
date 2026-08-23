@@ -309,7 +309,7 @@ function renderTabla() {
         const color = ESTADO_PASTEL[c.estado] || "#e2e8f0";
         const obsCls = c.observaciones ? "crm-obs-btn crm-obs-tiene" : "crm-obs-btn crm-obs-vacio";
         return `<tr>
-            <td><strong>${esc(c.canal)}</strong></td>
+            <td><strong class="crm-link" data-id="${c.id}">${esc(c.canal)}</strong></td>
             <td>${esc(c.region)}</td>
             <td>${esc(c.linea)}</td>
             <td>${esc(c.sku)}</td>
@@ -325,14 +325,14 @@ function renderTabla() {
             <td class="crm-obs">
                 <button class="${obsCls}" data-id="${c.id}" title="Ver observaciones">Obs</button>
             </td>
-            <td class="crm-acciones">
-                <button class="crm-icono crm-edit" data-id="${c.id}" title="Editar">&#9998;</button>
-                <button class="crm-icono crm-del" data-id="${c.id}" title="Eliminar">&#128465;</button>
-            </td>
             <td class="crm-fecha">${periodoQ(c.fechaEstimada)}</td>
             <td class="crm-num crm-fecha">${fmtFecha(c.fechaEstimada)}</td>
             <td class="crm-num crm-fecha">${fmtFecha(c.fechaRegistro)}</td>
             <td class="crm-num crm-fecha">${fmtFecha(c.fechaEstado)}</td>
+            <td class="crm-acciones">
+                <button class="crm-icono crm-edit" data-id="${c.id}" title="Editar">&#9998;</button>
+                <button class="crm-icono crm-del" data-id="${c.id}" title="Eliminar">&#128465;</button>
+            </td>
         </tr>`;
     }).join("");
     vacio.style.display = rows.length ? "none" : "block";
@@ -787,6 +787,13 @@ function setup() {
     });
 
     document.getElementById("crm-tbody").addEventListener("click", ev => {
+        const link = ev.target.closest(".crm-link");
+        if (link) {
+            const id = Number(link.dataset.id);
+            const rec = clientes.find(c => c.id === id);
+            if (rec) abrirModal(rec);
+            return;
+        }
         const btn = ev.target.closest("button");
         if (!btn) return;
         const id = Number(btn.dataset.id);
@@ -794,11 +801,8 @@ function setup() {
             const rec = clientes.find(c => c.id === id);
             if (rec) abrirModal(rec);
         } else if (btn.classList.contains("crm-del")) {
-            if (confirm("¿Eliminar este registro?")) {
-                clientes = clientes.filter(c => c.id !== id);
-                saveData();
-                renderAll();
-            }
+            const rec = clientes.find(c => c.id === id);
+            if (rec) abrirDeletePopup(rec);
         } else if (btn.classList.contains("crm-obs-btn")) {
             abrirObsPopup(id);
         }
@@ -806,6 +810,52 @@ function setup() {
 
     document.getElementById("crm-modal").addEventListener("click", ev => {
         if (ev.target.id === "crm-modal") cerrarModal();
+    });
+
+    const deletePopup = document.getElementById("crm-delete-popup");
+    const deleteInput = document.getElementById("crm-delete-input");
+    const deleteConfirm = document.getElementById("crm-delete-confirm");
+    let deleteTarget = null;
+
+    function abrirDeletePopup(rec) {
+        deleteTarget = rec;
+        document.getElementById("crm-delete-name").textContent = rec.canal || "—";
+        deleteInput.value = "";
+        deleteConfirm.disabled = true;
+        deleteConfirm.style.opacity = "0.5";
+        deletePopup.style.display = "flex";
+        setTimeout(() => deleteInput.focus(), 100);
+    }
+
+    deleteInput.addEventListener("input", () => {
+        const match = deleteTarget && deleteInput.value.trim().toLowerCase() === (deleteTarget.canal || "").toLowerCase();
+        deleteConfirm.disabled = !match;
+        deleteConfirm.style.opacity = match ? "1" : "0.5";
+    });
+
+    deleteConfirm.addEventListener("click", () => {
+        if (!deleteTarget) return;
+        clientes = clientes.filter(c => c.id !== deleteTarget.id);
+        saveData();
+        deletePopup.style.display = "none";
+        deleteTarget = null;
+        renderAll();
+    });
+
+    document.getElementById("crm-delete-cancel").addEventListener("click", () => {
+        deletePopup.style.display = "none";
+        deleteTarget = null;
+    });
+
+    deletePopup.addEventListener("click", ev => {
+        if (ev.target.id === "crm-delete-popup") {
+            deletePopup.style.display = "none";
+            deleteTarget = null;
+        }
+    });
+
+    deleteInput.addEventListener("keydown", ev => {
+        if (ev.key === "Enter" && !deleteConfirm.disabled) deleteConfirm.click();
     });
 }
 

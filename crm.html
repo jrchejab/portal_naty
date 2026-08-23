@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRM - Clientes</title>
-    <link rel="stylesheet" href="css/styles.css?v=16">
+    <link rel="stylesheet" href="css/styles.css?v=17">
 </head>
 <body>
     <nav id="menu" class="menu-superior"></nav>
@@ -78,11 +78,11 @@
                             <th># Order</th>
                             <th>Estado</th>
                             <th>Obs.</th>
-                            <th></th>
                             <th>Periodo Q</th>
                             <th>F. Est. Cierre</th>
                             <th>F. Registro</th>
                             <th>F. Últ. Estado</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="crm-tbody"></tbody>
@@ -108,6 +108,21 @@
                 <button id="crm-obs-cerrar" class="filtro-btn">✕</button>
             </div>
             <div id="crm-obs-texto" class="crm-obs-texto"></div>
+        </div>
+    </div>
+
+    <div id="crm-delete-popup" class="crm-modal" style="display:none">
+        <div class="crm-modal-box" style="max-width:420px">
+            <h2>CONFIRMAR ELIMINACIÓN</h2>
+            <p style="font-size:0.85rem; color:#6b7280; margin:0 0 6px">Escriba el nombre del cliente para confirmar:</p>
+            <p id="crm-delete-name" style="font-size:1.1rem; font-weight:700; margin:0 0 10px"></p>
+            <input type="text" id="crm-delete-input" placeholder="Escriba el nombre aquí" autocomplete="off"
+                style="width:100%; box-sizing:border-box; padding:8px 10px; border:1px solid #d0d5dd; border-radius:8px; font-size:0.85rem">
+            <div class="crm-modal-acciones">
+                <button id="crm-delete-cancel" class="filtro-btn">CANCELAR</button>
+                <button id="crm-delete-confirm" class="filtro-btn" disabled
+                    style="background:#ef4444; color:#fff; border-color:#ef4444; opacity:0.5">ELIMINAR</button>
+            </div>
         </div>
     </div>
 
@@ -181,7 +196,7 @@
         </div>
     </div>
 
-    <script src="js/crm.js?v=16"></script>
-    <script src="js/nav.js?v=16"></script>
+    <script src="js/crm.js?v=17"></script>
+    <script src="js/nav.js?v=17"></script>
 </body>
 </html>
