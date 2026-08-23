@@ -329,6 +329,7 @@ function renderTabla() {
                 <button class="crm-icono crm-edit" data-id="${c.id}" title="Editar">&#9998;</button>
                 <button class="crm-icono crm-del" data-id="${c.id}" title="Eliminar">&#128465;</button>
             </td>
+            <td class="crm-fecha">${periodoQ(c.fechaEstimada)}</td>
             <td class="crm-num crm-fecha">${fmtFecha(c.fechaEstimada)}</td>
             <td class="crm-num crm-fecha">${fmtFecha(c.fechaRegistro)}</td>
             <td class="crm-num crm-fecha">${fmtFecha(c.fechaEstado)}</td>
@@ -371,12 +372,23 @@ function renderTotales(rows) {
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
     </tr>`;
 }
 
 function esc(s) {
     if (s === null || s === undefined) return "";
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function periodoQ(fecha) {
+    if (!fecha) return "—";
+    const mes = Number(String(fecha).split("-")[1]) || 0;
+    if (mes >= 1 && mes <= 3) return "Q1";
+    if (mes >= 4 && mes <= 6) return "Q2";
+    if (mes >= 7 && mes <= 9) return "Q3";
+    if (mes >= 10 && mes <= 12) return "Q4";
+    return "—";
 }
 
 function actualizarBadgeFechas() {
@@ -519,10 +531,10 @@ function guardarForm(e) {
 }
 
 function exportarCSV() {
-    const hdr = ["Region", "Canal", "Linea", "SKU", "Unidades", "Promo", "skuPromo", "PrecioCliente", "PrecioIntcomex", "FechaEstimada", "Total", "ShipAndDebit", "OrderNo", "Estado", "FechaRegistro", "FechaEstado", "Observaciones"];
+    const hdr = ["Region", "Canal", "Linea", "SKU", "Unidades", "Promo", "skuPromo", "PrecioCliente", "PrecioIntcomex", "FechaEstimada", "Total", "ShipAndDebit", "OrderNo", "Estado", "PeriodoQ", "FechaRegistro", "FechaEstado", "Observaciones"];
     const lines = [hdr.join(",")];
     clientes.forEach(c => {
-        const vals = [c.region, c.canal, c.linea, c.sku, c.unidades, c.promo, c.skuPromo, c.precioCliente, c.precioIntcomex, c.fechaEstimada, totalRegistro(c), c.shipAndDebit || "", c.orderNo || "", c.estado, c.fechaRegistro, c.fechaEstado, c.observaciones];
+        const vals = [c.region, c.canal, c.linea, c.sku, c.unidades, c.promo, c.skuPromo, c.precioCliente, c.precioIntcomex, c.fechaEstimada, totalRegistro(c), c.shipAndDebit || "", c.orderNo || "", c.estado, periodoQ(c.fechaEstimada), c.fechaRegistro, c.fechaEstado, c.observaciones];
         lines.push(vals.map(v => {
             v = (v === null || v === undefined) ? "" : String(v);
             return /[",;\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
