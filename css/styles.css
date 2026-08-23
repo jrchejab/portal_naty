@@ -438,10 +438,10 @@ body {
     border-bottom-color: #6366f1;
 }
 
-.crm-q1 { background: #dbeafe; color: #1e40af; border-radius: 4px; text-align: center; font-weight: 600; }
-.crm-q2 { background: #dcfce7; color: #166534; border-radius: 4px; text-align: center; font-weight: 600; }
-.crm-q3 { background: #fef3c7; color: #92400e; border-radius: 4px; text-align: center; font-weight: 600; }
-.crm-q4 { background: #ffe4e6; color: #9f1239; border-radius: 4px; text-align: center; font-weight: 600; }
+.crm-q1 { color: #1e40af; font-weight: 700; }
+.crm-q2 { color: #166534; font-weight: 700; }
+.crm-q3 { color: #92400e; font-weight: 700; }
+.crm-q4 { color: #9f1239; font-weight: 700; }
 
 .crm-obs-btn {
     border: 1px solid #d0d5dd;
