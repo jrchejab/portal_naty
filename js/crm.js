@@ -277,6 +277,7 @@ function actualizarBadgeFiltros() {
 
 function filtrados() {
     const e = document.getElementById("filtro-estado").value;
+    const fq = document.getElementById("filtro-q").value;
     const feD = document.getElementById("filtro-fe-desde").value;
     const feH = document.getElementById("filtro-fe-hasta").value;
     const frD = document.getElementById("filtro-fr-desde").value;
@@ -288,6 +289,7 @@ function filtrados() {
         (!filtroRegiones.length || filtroRegiones.includes(x.region)) &&
         (!filtroClientes.length || filtroClientes.includes(x.canal)) &&
         (!e || x.estado === e) &&
+        (!fq || periodoQ(x.fechaEstimada) === fq) &&
         entre(x.fechaEstimada, feD, feH) &&
         entre(x.fechaRegistro, frD, frH) &&
         entre(x.fechaEstado, fsD, fsH)
@@ -675,6 +677,7 @@ function setup() {
     loadData();
 
     document.getElementById("filtro-estado").addEventListener("change", refrescar);
+    document.getElementById("filtro-q").addEventListener("change", refrescar);
 
     const regionBtn = document.getElementById("filtro-region-btn");
     const regionPop = document.getElementById("filtro-region-popup");
