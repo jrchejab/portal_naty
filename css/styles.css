@@ -438,6 +438,11 @@ body {
     border-bottom-color: #6366f1;
 }
 
+.crm-q1 { background: #dbeafe; color: #1e40af; border-radius: 4px; text-align: center; font-weight: 600; }
+.crm-q2 { background: #dcfce7; color: #166534; border-radius: 4px; text-align: center; font-weight: 600; }
+.crm-q3 { background: #fef3c7; color: #92400e; border-radius: 4px; text-align: center; font-weight: 600; }
+.crm-q4 { background: #ffe4e6; color: #9f1239; border-radius: 4px; text-align: center; font-weight: 600; }
+
 .crm-obs-btn {
     border: 1px solid #d0d5dd;
     border-radius: 6px;
@@ -717,6 +722,11 @@ body {
     color: #6b7280;
     gap: 4px;
     margin-top: 12px;
+}
+
+.crm-modal-box > label.crm-label-ship,
+.crm-modal-box > label.crm-label-obs {
+    margin-top: 18px;
 }
 
 .crm-modal-box > label textarea {

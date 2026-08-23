@@ -325,7 +325,7 @@ function renderTabla() {
             <td class="crm-obs">
                 <button class="${obsCls}" data-id="${c.id}" title="Ver observaciones">Obs</button>
             </td>
-            <td class="crm-fecha">${periodoQ(c.fechaEstimada)}</td>
+            <td class="crm-fecha ${periodoQClass(c.fechaEstimada)}">${periodoQ(c.fechaEstimada)}</td>
             <td class="crm-num crm-fecha">${fmtFecha(c.fechaEstimada)}</td>
             <td class="crm-num crm-fecha">${fmtFecha(c.fechaRegistro)}</td>
             <td class="crm-num crm-fecha">${fmtFecha(c.fechaEstado)}</td>
@@ -389,6 +389,11 @@ function periodoQ(fecha) {
     if (mes >= 7 && mes <= 9) return "Q3";
     if (mes >= 10 && mes <= 12) return "Q4";
     return "—";
+}
+
+function periodoQClass(fecha) {
+    const q = periodoQ(fecha);
+    return q === "Q1" ? "crm-q1" : q === "Q2" ? "crm-q2" : q === "Q3" ? "crm-q3" : q === "Q4" ? "crm-q4" : "";
 }
 
 function actualizarBadgeFechas() {
